@@ -1,0 +1,116 @@
+.navbar-collapse, .app-content, .app-footer {
+    margin-left: auto !important;
+}
+
+html {
+    background-color: white !important;
+}
+
+span.usa-icon {
+    font-size: 12px;
+}
+
+.center-block {
+    display: block;
+    margin: 0 auto;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+table a.link, table span.link {
+    color: #2B587A;
+    text-decoration: underline;
+}
+
+/*.tab-pane.active {*/
+    /*border-right: 1px solid #dee5e7 !important;*/
+/*}*/
+
+#toast-container {
+    opacity: 0.9;
+}
+
+.modal-body ::-webkit-scrollbar, .cart-block .list-group ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+.modal-body ::-webkit-scrollbar-thumb, .cart-block .list-group ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+.multiple-select {
+    width: 200px;
+    height: 220px;
+    margin:0 auto;
+    overflow-y: auto;
+}
+
+.multiple-select label {
+    display: block;
+    margin: 0;
+}
+
+.multiple-select label:hover, .arrows-sorts:hover {
+    cursor: pointer;
+}
+
+.arrows-sorts {
+    display:block;
+    width: 15px;
+    height: 18px;
+}
+
+/* Sort arrows */
+.arrows-sorts.disabled {
+    background: url('../assets/images/arrows/sort_both.png') no-repeat;
+}
+
+.arrows-sorts.asc {
+    background: url('../assets/images/arrows/sort_asc.png') no-repeat;
+}
+
+.arrows-sorts.desc {
+    background: url('../assets/images/arrows/sort_desc.png') no-repeat;
+}
+
+/* ui-select styles */
+.select2 > .select2-choice.ui-select-match {
+    /* Because of the inclusion of Bootstrap */
+    height: 29px;
+}
+
+.selectize-control > .selectize-dropdown {
+    top: 36px;
+}
+
+ol.breadcrumb li:last-child a:hover, ol.breadcrumb li:last-child:hover {
+    cursor: default;
+}
+
+select.form-control {
+    height: 30px;
+}
+
+input.quantity {
+    width: 60px;
+}
+
+.table>tbody>tr>td, .table>tfoot>tr>td {
+    padding: 8px 10px !important;
+}
+
+.relative-block {
+    position: relative;
+}
+
+.hidden-elem {
+    display: none;
+}
+
+.modal .modal-dialog {
+    margin: 10% auto;
+}

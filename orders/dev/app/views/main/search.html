@@ -1,0 +1,121 @@
+<div class="bg-light lter b-b wrapper-md">
+    <div class="products-header">
+        <ol class="breadcrumb">
+            <li><a ng-click="$root.goToDashboard()"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Search</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <loading></loading>
+
+    <form class="m-b-md" ng-hide="inProgress">
+        <div class="inner-addon right-addon">
+            <i class="fa fa-times" ng-click="filters.substr = ''"></i>
+            <input type="text"
+                   ng-model="filters.substr"
+                   ng-keyup="$event.keyCode == 13 && search()"
+                   class="form-control"
+                   placeholder="Text/key phrase">
+
+            <div class="form-group m-t-sm">
+                <ui-select ng-model="filters.categoryId" get-categories>
+                    <ui-select-match allow-clear placeholder="Select a category">{{ $select.selected.name }}</ui-select-match>
+                    <ui-select-choices repeat="category.id as category in categories | propsFilter: { name: $select.search }">
+                        <span ng-bind-html="category.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="form-group m-t-sm">
+                <ui-select ng-model="filters.manufacturerId" get-manufacturers>
+                    <ui-select-match allow-clear placeholder="Select a manufacturer">{{ $select.selected.name }}</ui-select-match>
+                    <ui-select-choices repeat="manf.id as manf in manfs | propsFilter: { name: $select.search }">
+                        <span ng-bind-html="manf.name | highlight: $select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <button class="btn btn-info" ng-click="search()" type="button">Search</button>
+
+            <pagination ng-model="productPagination.currentPage"
+                        items-per-page="productPagination.perPage"
+                        previous-text="Prev"
+                        style="margin: 0;"
+                        max-size="10"
+                        boundary-links="true"
+                        class="pagination-sm pull-right"
+                        total-items="productPagination.total"
+                        ng-change="search()">
+            </pagination>
+        </div>
+    </form>
+
+    <p class="m-b-md" ng-show="results"><strong ng-bind="results.length"></strong> Results found for: <strong ng-bind="findBy"></strong></p>
+
+    <div class="alert alert-warning text-center" ng-show="!products.length && !inProgress">
+        Can't find anything, please retry something else.
+    </div>
+
+    <div class="row products product-grey-border product-grey-back"
+         ng-class="{ 'discontinued': product.removed }"
+         ng-repeat="product in products">
+
+        <div class="corner-ribbon">Inactive</div>
+
+        <div class="col-lg-2">
+            <img ng-src="assets/images/{{ product.img || 'default.png' }}">
+        </div>
+        <div class="col-lg-10">
+            <div class="product-line">
+                <div class="title"
+                     ng-bind="product.name"
+                     ui-sref="products.show({ productId: product.id })"></div>
+                <div class="brand" ng-bind="product.category_name" ui-sref="products.index({ categoryId: product.category })"></div>
+
+                <div class="pull-right" ng-if="auth.isCustomer()">
+
+                    <div class="qty">
+                        <div>Qty:</div>
+                        <div>
+                            <input class="form-control input-sm quantity"
+                                   ng-init="quantity = 1"
+                                   ng-model="quantity"
+                                   ng-disabled="product.only_one || product.removed"
+                                   format="integer">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="cart">
+                        <i class="icon-basket" ng-click="cart.addProduct(product, quantity)"></i>
+                    </div>
+                    <div class="favorite">
+                        <i class="fa {{ (favorite.inList(product.id)) ? 'fa-star text-warning' : 'fa-star-o' }}"
+                           yes-no-modal="ADD_PRODUCT_FAVORITE_LIST"
+                           condition="favorite.getAmountLists() > 1"
+                           params="{ id: product.id }"
+                           on-confirm="favorite.addProduct(data, product.id)">
+                        </i>
+                    </div>
+                </div>
+
+                <div class="price pull-right m-r-lg">Price:  {{ product.price }}$</div>
+
+                <div class="pull-right m-r-lg">
+                    <span ng-bind="product.uom_name"></span>
+                    <span> / </span>
+                    <span ng-bind="product.uom_abbr"></span>
+                </div>
+
+            </div>
+            <div class="product-line">
+                <div>{{ ::product.manf_name }}, {{ ::product.manf_id }}</div>
+            </div>
+            <div>
+                {{ product.description | limitTo: 320 }}...
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+.cart-buttons button, .categories-list button, .cart-buttons input, .cart-buttons textarea {
+    width: 90%;
+    display: block;
+    margin: 10px auto;
+}
+
+.cart-buttons .price .usa-icon {
+    margin-bottom: 3px;
+}
+
+.product-description .cart {
+    margin: 0px 0px 0px 30px;
+}
+
+.product-cart-description {
+    padding-left: 5%;
+}
+
+.remove i {
+    font-size: 17px;
+    margin-left: 10px;
+}
+
+.remove i:hover {
+    cursor: pointer;
+    color: #f05050;
+}
+
+.product-sort label {
+    cursor: pointer;
+}
+
+/* Close button inside input */
+.inner-addon {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.inner-addon .fa {
+    position: absolute;
+    padding: 10px;
+    color: #dee5e7;
+}
+
+.right-addon .fa {
+    right: 0px;
+}
+
+.inner-addon .fa:hover {
+    cursor: pointer;
+    color: #58666e !important;
+}
+
+.right-addon input {
+    padding-right: 30px;
+}
+/* End */
+
+.manage-table {
+    height: 220px;
+    overflow-y: scroll;
+}
+
+.add i {
+    font-size: 17px;
+}
+
+.add i:hover {
+    color: #27c24c;
+    cursor: pointer;
+}
+
+.order-detail {
+    border: 0px !important;
+}
+
+.order-detail tr:last-child td {
+    border: 0px !important;
+}

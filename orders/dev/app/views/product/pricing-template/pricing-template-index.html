@@ -1,0 +1,73 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Pricing Templates</a></li>
+        </ol>
+        <button class="btn btn-success pull-right btn-sm add-location" ui-sref="pricing-template.create">Add new template</button>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <loading></loading>
+
+    <div class="alert alert-warning text-center" ng-hide="templates.length || inProgress">
+        There is not any pricing template in the system.
+    </div>
+
+    <table ng-show="templates.length" class="table table-bordered table-hover table-condensed bg-white-only">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td width="25%">
+                Template Name
+                <span sortings="name" on-change="order(params)"></span>
+            </td>
+            <td width="17%">
+                Number of shown items
+                <span sortings="shown" on-change="order(params)"></span>
+            </td>
+            <td width="18%">
+                Number of hidden items
+                <span sortings="hidden" on-change="order(params)"></span>
+            </td>
+            <td width="25%">
+                Number of customized (priced) items
+                <span sortings="customized" on-change="order(params)"></span>
+            </td>
+            <td width="15%">
+                Actions
+            </td>
+
+        </tr>
+        <tr ng-repeat="template in templates">
+            <td class="v-middle">
+                <span ng-bind="template.name">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="template.shown">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="template.hidden">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="template.customized">
+                </span>
+            </td>
+            <td class="v-middle">
+                <div class="buttons">
+                    <button class="btn btn-sm btn-info"
+                            ui-sref="pricing-template.edit({ templateId: template.id })">
+                        Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger"
+                            ng-click="remove(template.accounts, template.id)">
+                        Remove
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

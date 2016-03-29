@@ -1,0 +1,94 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a ui-sref="user.index">Users</a></li>
+            <li><a>Create</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">New user form</div>
+                <div class="panel-body create-account hbox">
+
+                    <div class="table-row">
+                        <div class="col">
+                            User Type
+                            <sup class="required-sup">*</sup>
+                        </div>
+                        <div class="col">
+                            <div class="radio user-types">
+                                <label>
+                                    <input type="radio"
+                                           ng-model="user.type"
+                                           value="customer">
+                                    Standard User
+                                </label>
+                                <label>
+                                    <input type="radio"
+                                           ng-model="user.type"
+                                           value="corporate_user">
+                                    Corporate User
+                                </label>
+                                <label>
+                                    <input type="radio"
+                                           ng-model="user.type"
+                                           value="corporate_admin">
+                                    Corporate Admin
+                                </label>
+                                <label ng-if="role === 'superadmin'">
+                                    <input type="radio"
+                                           ng-model="user.type"
+                                           value="admin">
+                                    KOPP staff
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <customer-form user="user"
+                               is-valid="form.isValid"
+                               is-submitted="isSubmitted"
+                               accounts="accounts"
+                               ng-if="user.type == 'customer'">
+                </customer-form>
+
+                <corporate-user-form user="user"
+                                     is-valid="form.isValid"
+                                     is-submitted="isSubmitted"
+                                     accounts="accounts"
+                                     ng-if="user.type == 'corporate_user'">
+                </corporate-user-form>
+
+                <corporate-admin-form user="user"
+                                      is-valid="form.isValid"
+                                      is-submitted="isSubmitted"
+                                      accounts="accounts"
+                                      ng-if="user.type == 'corporate_admin'">
+                </corporate-admin-form>
+
+                <admin-form user="user"
+                            is-valid="form.isValid"
+                            is-submitted="isSubmitted"
+                            ng-if="user.type == 'admin'">
+                </admin-form>
+
+                <div class="hbox panel-body">
+                    <div class="table-row account-buttons">
+                        <div class="col"></div>
+                        <div class="col">
+                            <button class="btn btn-success pull-right" ng-click="save()">Save</button>
+                            <button class="btn btn-danger pull-right m-r-sm" ui-sref="user.index">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

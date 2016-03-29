@@ -1,0 +1,171 @@
+<loading></loading>
+
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a ui-sref="products.custom-items">Custom Items</a></li>
+            <li><a>Updated Custom Items</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md" ng-hide="inProgress">
+
+    <div class="product-grey-border product-grey-back m-b-lg hbox wrapper-sm">
+        <div class="col">
+            <div><b>Account ID:</b> {{ ::account.account_id }}</div>
+        </div>
+        <div class="col">
+            <div><b>Account Name:</b> {{ ::account.name }}</div>
+        </div>
+        <div class="col">
+            <div><b>Account Type:</b> {{ ::account.type |types:'account' }}</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="note" ng-if="selectedAccount">
+            <strong>* Please select category in order to show the list of items.</strong>
+        </div>
+        <div class="note" ng-if="selectedAccount">
+            <strong>* You can show/hide and pricing any item to the selected main account.</strong>
+        </div>
+
+        <div id="filters" class="panel-body">
+            <div class="in-line">
+                <div>Category</div>
+                <div class="form-group w-md m-l-sm">
+                    <ui-select ng-model="filters.category" get-categories>
+                        <ui-select-match allow-clear placeholder="Select a category">{{ $select.selected.name }}</ui-select-match>
+                        <ui-select-choices repeat="category.id as category in categories | propsFilter: { name: $select.search }">
+                            <span ng-bind-html="category.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="pull-right m-l-xs">
+                    <button class="btn btn-default" ng-click="getProducts()">Search</button>
+                </div>
+
+                <div class="w-md pull-right">
+                    <div class="inner-addon right-addon">
+                        <i class="fa fa-times" ng-click="filters.substr = ''"></i>
+                        <input type="text"
+                               ng-model="filters.substr"
+                               placeholder="Mnf ID / Item Name"
+                               ng-keyup="$event.keyCode == 13 && getProducts()"
+                               class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="in-line template-filters m-t-xs">
+                <div>Filter by </div>
+                <div class="form-group w-md m-l">
+                    <ui-select ng-model="filters.filter" search-enabled="false">
+                        <ui-select-match placeholder="Select some option">{{ $select.selected.name }}</ui-select-match>
+                        <ui-select-choices repeat="option.val as option in options">
+                            {{ option.name }}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="pull-right">
+                    <ui-select ng-model="filters.manufacturerId" style="width: 312px;" get-manufacturers>
+                        <ui-select-match allow-clear placeholder="Select a manufacturer">{{ $select.selected.name }}</ui-select-match>
+                        <ui-select-choices repeat="manf.id as manf in manfs | propsFilter: { name: $select.search }">
+                            <span ng-bind-html="manf.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-striped table-bordered table-hover table-condensed bg-white-only">
+                <tr style="font-weight: bold" class="product-grey-back">
+                    <td width="3%">Hide</td>
+                    <td width="10%">
+                        Mnf ID
+                        <span sortings="manf_id" on-change="order(params)"></span>
+                    </td>
+                    <td width="26%">
+                        Item Name
+                        <span sortings="name" on-change="order(params)"></span>
+                    </td>
+                    <td width="26%">
+                        Manufacturer
+                        <span sortings="manf_name" on-change="order(params)"></span>
+                    </td>
+                    <td width="10%">
+                        Amt
+                        <span sortings="amt" on-change="order(params)"></span>
+                    </td>
+                    <td width="10%">
+                        Default Price
+                        <span sortings="default_price" on-change="order(params)"></span>
+                    </td>
+                    <td width="17%">Hide / Custom Price</td>
+                </tr>
+                <tr ng-repeat="product in products">
+                    <td>
+                        <input type="checkbox"
+                               ng-model="changedProducts[product.id].hidden"
+                               ng-change="changeProduct(product.id)">
+                    </td>
+                    <td ng-bind="product.manf_id"></td>
+                    <td ng-bind="product.name"></td>
+                    <td ng-bind="product.manf_name"></td>
+                    <td ng-bind="product.amt"></td>
+                    <td ng-bind="product.default_price"></td>
+                    <td class="custom-price">
+                        <input type="checkbox"
+                               ng-model="changedProducts[product.id].hidden_custom_price"
+                               ng-change="changeProduct(product.id)">
+
+                        <input class="form-control input-sm"
+                               type="text"
+                               format="float"
+                               ng-model="changedProducts[product.id].custom_price"
+                               ng-change="changeProduct(product.id)">
+                    </td>
+                </tr>
+            </table>
+
+            <div class="inline-block pull-right">
+                <pagination ng-model="productPagination.currentPage"
+                            items-per-page="productPagination.perPage"
+                            previous-text="Prev"
+                            style="margin: 0;"
+                            max-size="10"
+                            boundary-links="true"
+                            class="pagination-sm pull-right inline-block"
+                            total-items="productPagination.total"
+                            ng-change="getProducts()">
+                </pagination>
+
+                <div class="inline-block">Show per page: </div>
+                <ui-select class="m-r-xs inline-block"
+                           style="width: 80px;"
+                           on-select="getProducts()"
+                           search-enabled="true"
+                           ng-model="productPagination.perPage">
+                    <ui-select-match>{{ $select.selected }}</ui-select-match>
+                    <ui-select-choices repeat="i in perPage">
+                        {{ i }}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <div class="hbox panel-body">
+            <div class="table-row account-buttons">
+                <div class="col"></div>
+                <div class="col padding-top">
+                    <button class="btn btn-success pull-right" ng-click="save()">Save</button>
+                    <button class="btn btn-danger pull-right m-r-sm" ui-sref="products.custom-items">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

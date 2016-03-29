@@ -1,0 +1,88 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a ui-sref="order.recent">Recent Orders</a></li>
+            <li><a>{{ $stateParams.orderId }}</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md product-content">
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="alert alert-warning text-center" ng-hide="products.length">
+                Yo don't have any products in the cart
+            </div>
+
+            <div ng-repeat="product in products.slice(((pagination.currentPage - 1) * pagination.perPage), ((pagination.currentPage) * pagination.perPage))"
+                 ng-show="products.length"
+                 ng-class="{ 'discontinued': product.removed }"
+                 class="row products product-grey-border product-grey-back">
+
+                <div class="corner-ribbon">Discontinued</div>
+
+                <div class="col-lg-2">
+                    <img ng-src="assets/images/{{ product.img || 'default.png' }}">
+                </div>
+                <div class="col-lg-10 product-cart-description">
+                    <div class="product-line">
+                        <div class="title"
+                             ng-bind="product.name"
+                             ui-sref="products.show({ productId: product.id })"></div>
+                        <div class="brand" ng-bind="product.category_name" ui-sref="products.index({ categoryId: product.category })"></div>
+
+                        <div class="pull-right">
+                            <span ng-bind="product.uom_name"></span>
+                            <span> / </span>
+                            <span ng-bind="product.uom_abbr"></span>
+
+                            <div class="price"> Price: {{ product.price | number:2 }}$</div>
+                            <div class="qty">
+                                <div>Qty:</div>
+                                <input class="form-control input-sm quantity"
+                                       ng-init="quantity = 1"
+                                       ng-model="product.quantity"
+                                       ng-disabled="product.only_one || product.removed"
+                                       format="integer">
+                                <div class="cart">
+                                    <i class="icon-basket"
+                                       ng-click="cart.addProduct(product, product.quantity)"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="product-line">
+                        <div>{{ product.manf_name }}, {{ product.manf_id }}</div>
+                    </div>
+                    <div>
+                        {{ product.description | limitTo: 320 }}...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="product-grey-border product-grey-back cart-buttons wrapper">
+                <div class="price m-t-sm text-center">
+                    Subtotal ({{ productSvc.getSumAmount(products) }} items):
+                    <span class=" usa-icon fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-usd fa-stack-1x fa-inverse"></i>
+                    </span>
+                    {{ productSvc.getSumPrice(products) | number:2 }}
+                </div>
+                <button class="btn m-b-xs w-xs btn-success"
+                        yes-no-modal="DUPLICATE_THE_ORDER"
+                        on-confirm="toCart()">Duplicate Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .qty > * {
+        display: inline-block;
+    }
+</style>

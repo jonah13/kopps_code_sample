@@ -1,0 +1,94 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a ui-sref="category.index">Categories</a></li>
+            <li><a>Edit</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-9">
+            <form name="updateCategoryForm"
+                  novalidate
+                  ng-submit="update(updateCategoryForm.$valid)">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">New category form</div>
+                    <div class="panel-body create-account hbox">
+
+                        <div class="table-row">
+                            <div class="col">
+                                Category Name
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="name"
+                                           name="name"
+                                           ng-model="category.name"
+                                           ng-required="true"
+                                           class="form-control">
+                                </div>
+                                <div ng-show="isSubmitted" ng-messages="updateCategoryForm.name.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row general-attributes">
+                            <div class="col">
+                                General Attributes
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <ng-include src="'views/product/default-product-attrbutes-list.html'"></ng-include>
+                            </div>
+                        </div>
+
+                        <div class="table-row custom-attributes">
+                            <div class="col">
+                                Customized Attributes
+                            </div>
+                            <div class="col">
+                                <div class="hover add-attribute" ng-show="!category.attributes.length" ng-click="addAttribute()">
+                                    <i class="fa fa-plus-circle m-r-xs v-middle"></i>
+                                    <span class="v-middle">Add attribute</span>
+                                </div>
+
+                                <div ng-repeat="attribute in category.attributes track by $index">
+
+                                    <custom-attribute-form attribute="attribute"
+                                                           form-to-validate="forms"
+                                                           is-submitted="isSubmitted"
+                                                           attribute-index="{{ $index }}"></custom-attribute-form>
+
+                                    <i class="fa fa-trash-o m-l-sm pull-left m-t"
+                                       ng-click="removeAttribute($index)"></i>
+
+                                    <i class="fa fa-plus-circle m-l-sm pull-left m-t"
+                                       ng-show="$last"
+                                       ng-click="addAttribute()"></i>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row account-buttons">
+                            <div class="col"></div>
+                            <div class="col padding-top">
+                                <button class="btn btn-success pull-right" type="submit">Update</button>
+                                <button class="btn btn-danger pull-right m-r-sm" ui-sref="category.index">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<form name="add-location-form" ng-submit="save($event)">
+    <div class="hbox wrapper product-grey-border product-grey-back">
+        <div class="table-row">
+            <div class="col">Facility Name</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           ng-model="location.name"
+                           ng-model-options="{ debounce: 1000 }"
+                           class="form-control"
+                           required>
+                </div>
+            </div>
+        </div>
+        <div class="table-row">
+            <div class="col">Address 1</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           ng-model="location.address_1"
+                           class="form-control"
+                           required>
+                </div>
+            </div>
+        </div>
+        <div class="table-row">
+            <div class="col">Address 2</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           ng-model="location.address_2"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="table-row">
+            <div class="col">State</div>
+            <div class="col">
+                <div class="form-group">
+                    <select class="form-control"
+                            ng-model="location.state"
+                            ng-options="state.value as state.name for state in statesList"
+                            ng-required="true">
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="table-row">
+            <div class="col">City</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           ng-model="location.city"
+                           class="form-control"
+                           required>
+                </div>
+            </div>
+        </div>
+        <div class="table-row">
+            <div class="col">Zip Code</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           ng-model="location.zip"
+                           class="form-control"
+                           required>
+                </div>
+            </div>
+        </div>
+        <div class="table-row">
+            <div class="col"></div>
+            <div class="col">
+                <button class="btn btn-danger btn-sm pull-right" type="button" ng-click="onClose()">Close</button>
+                <button class="btn btn-success m-r-xs btn-sm pull-right" type="submit">{{ buttonName}}</button>
+            </div>
+        </div>
+    </div>
+</form>

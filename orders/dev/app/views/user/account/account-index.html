@@ -1,0 +1,70 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Accounts</a></li>
+        </ol>
+        <button class="btn btn-success pull-right add-location btn-sm" ui-sref="account.create">Add new account</button>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <div class="row m-b-md">
+        <div class="inner-addon right-addon m-n col-md-3">
+            <!--<i class="fa fa-times" ng-click="filters.substr = ''"></i>-->
+            <input type="text"
+                   ng-model="substr"
+                   ng-model-options="{ debounce: 400 }"
+                   placeholder="Account name / Account ID"
+                   class="form-control">
+        </div>
+    </div>
+
+    <loading></loading>
+
+    <div class="alert alert-warning text-center" ng-hide="accounts.length || inProgress">
+        There is no accounts in the system.
+    </div>
+
+    <table ng-show="accounts.length" class="table table-bordered table-hover table-condensed bg-white-only">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td width="15%">Account ID</td>
+            <td width="15%">Account Name</td>
+            <td width="12%">Account Type</td>
+            <td width="10%">Status</td>
+            <td width="20%">Location(s)</td>
+            <td width="23%" class="min-width-240">Actions</td>
+
+        </tr>
+        <tr ng-repeat="account in accounts">
+            <td class="v-middle">
+                <span ng-bind="account.account_id">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="account.name">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="account.type | types:'account'">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span class="label {{ account.status }} capitalize" ng-bind="account.status"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="account.locations | delimiter"></span>
+            </td>
+            <td class="v-middle">
+                <div class="buttons">
+                    <button class="btn btn-sm btn-success" view-activity-button by="account" field-id="{{ account.id }}">Account activity</button>
+                    <button class="btn btn-sm btn-info" ui-sref="account.edit({ accountId: account.id })">Edit</button>
+                    <button class="btn btn-sm btn-danger"
+                            yes-no-modal="REMOVE_ACCOUNT"
+                            on-confirm="remove(!!account.users.length, account.id)">Remove</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

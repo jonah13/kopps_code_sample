@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" ng-app="kopp">
+    <head>
+        <base href="/">
+        <meta charset="utf-8">
+        <title>orders</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <!-- build:css({.tmp/serve,app}) styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="vendor/angular-loading-bar/build/loading-bar.css" />
+        <link rel="stylesheet" href="vendor/angular-toastr/dist/angular-toastr.css" />
+        <link rel="stylesheet" href="vendor/animate.css/animate.css" />
+        <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css" />
+        <link rel="stylesheet" href="vendor/ui-select/dist/select.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:css({.tmp/serve,app}) styles/app.css -->
+        <!-- inject:css -->
+        <link rel="stylesheet" href="styles/app.min.css">
+        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/spinner.css">
+        <link rel="stylesheet" href="styles/xeditable.css">
+        <link rel="stylesheet" href="styles/admin/account.css">
+        <link rel="stylesheet" href="styles/admin/custom-price.css">
+        <link rel="stylesheet" href="styles/main/dashboard.css">
+        <link rel="stylesheet" href="styles/main/footer.css">
+        <link rel="stylesheet" href="styles/main/header.css">
+        <link rel="stylesheet" href="styles/order/index.css">
+        <link rel="stylesheet" href="styles/order/reports.css">
+        <link rel="stylesheet" href="styles/products/categories.css">
+        <link rel="stylesheet" href="styles/products/index.css">
+        <link rel="stylesheet" href="styles/user/index.css">
+        <!-- endinject -->
+        <!-- endbuild -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <!--[if lt IE 10]>
+          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <ui-view></ui-view>
+
+        <!-- build:js({app, app/vendor}) scripts/vendor.js -->
+        <!-- bower:js -->
+        <script src="vendor/jquery/dist/jquery.js"></script>
+        <script src="vendor/angular/angular.js"></script>
+        <script src="vendor/angular-animate/angular-animate.js"></script>
+        <script src="vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="vendor/angular-cookies/angular-cookies.js"></script>
+        <script src="vendor/angular-loading-bar/build/loading-bar.js"></script>
+        <script src="vendor/angular-messages/angular-messages.js"></script>
+        <script src="vendor/angular-sanitize/angular-sanitize.js"></script>
+        <script src="vendor/tv4/tv4.js"></script>
+        <script src="vendor/objectpath/lib/ObjectPath.js"></script>
+        <script src="vendor/angular-schema-form/dist/schema-form.js"></script>
+        <script src="vendor/angular-schema-form/dist/bootstrap-decorator.js"></script>
+        <script src="vendor/angular-toastr/dist/angular-toastr.tpls.js"></script>
+        <script src="vendor/angular-touch/angular-touch.js"></script>
+        <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="vendor/cryptojslib/rollups/md5.js"></script>
+        <script src="vendor/cryptojslib/rollups/aes.js"></script>
+        <script src="vendor/cryptojslib/components/enc-base64.js"></script>
+        <script src="vendor/moment/moment.js"></script>
+        <script src="vendor/ngstorage/ngStorage.js"></script>
+        <script src="vendor/lodash/lodash.js"></script>
+        <script src="vendor/restangular/dist/restangular.js"></script>
+        <script src="vendor/ui-select/dist/select.js"></script>
+        <script src="vendor/underscore/underscore.js"></script>
+        <script src="vendor/angular-scroll/angular-scroll.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:js({.tmp/serve,.tmp/partials,app}) scripts/app.js -->
+        <!-- inject:js -->
+        <script src="scripts/user/user.module.js"></script>
+        <script src="scripts/user/controllers/user/user-my-account.controller.js"></script>
+        <script src="scripts/user/controllers/user/user-main-controller.js"></script>
+        <script src="scripts/user/controllers/user/user-index.controller.js"></script>
+        <script src="scripts/user/controllers/user/user-form.controller.js"></script>
+        <script src="scripts/user/controllers/user/user-edit.controller.js"></script>
+        <script src="scripts/user/controllers/user/user-create.controller.js"></script>
+        <script src="scripts/user/controllers/account/account-index.controller.js"></script>
+        <script src="scripts/user/controllers/account/account-edit.controller.js"></script>
+        <script src="scripts/user/controllers/account/account-create.controller.js"></script>
+        <script src="scripts/product/products.module.js"></script>
+        <script src="scripts/product/controllers/product/product-show.controller.js"></script>
+        <script src="scripts/product/controllers/product/product-index.controller.js"></script>
+        <script src="scripts/product/controllers/product/product-edit.controller.js"></script>
+        <script src="scripts/product/controllers/product/product-create.controller.js"></script>
+        <script src="scripts/product/controllers/product/product-admin-list.controller.js"></script>
+        <script src="scripts/product/controllers/pricing-template/pricing-template-index.controller.js"></script>
+        <script src="scripts/product/controllers/pricing-template/pricing-template-edit.controller.js"></script>
+        <script src="scripts/product/controllers/pricing-template/pricing-template-create.controller.js"></script>
+        <script src="scripts/product/controllers/category/category-main.controller.js"></script>
+        <script src="scripts/product/controllers/category/category-index.controller.js"></script>
+        <script src="scripts/product/controllers/category/category-edit.controller.js"></script>
+        <script src="scripts/product/controllers/category/category-create.controller.js"></script>
+        <script src="scripts/order/orders.module.js"></script>
+        <script src="scripts/order/controllers/modal/select-favorite-list-modal.controller.js"></script>
+        <script src="scripts/order/controllers/modal/manage-favorite-modal.js"></script>
+        <script src="scripts/main/main.module.js"></script>
+        <script src="scripts/main/services/secure-storage/session-secure-storage.js"></script>
+        <script src="scripts/main/services/secure-storage/secure-storage-manager.js"></script>
+        <script src="scripts/main/services/secure-storage/local-secure-storage.js"></script>
+        <script src="scripts/main/directives/changed-libs/xeditable.js"></script>
+        <script src="scripts/main/directives/changed-libs/angular-lightbox.js"></script>
+        <script src="scripts/main/controllers/dashboards/dashboard.controller.js"></script>
+        <script src="scripts/main/controllers/dashboards/corporate-admin-dashboard.controller.js"></script>
+        <script src="scripts/main/controllers/dashboards/admin-dashboard.controller.js"></script>
+        <script src="scripts/user/services/user.manager.js"></script>
+        <script src="scripts/user/services/location.manager.js"></script>
+        <script src="scripts/user/services/account.manager.js"></script>
+        <script src="scripts/user/directives/location-form.js"></script>
+        <script src="scripts/user/directives/customer-form.js"></script>
+        <script src="scripts/user/directives/corporate-user-form.js"></script>
+        <script src="scripts/user/directives/corporate-admin-form.js"></script>
+        <script src="scripts/user/directives/admin-form.js"></script>
+        <script src="scripts/user/controllers/user-login.controller.js"></script>
+        <script src="scripts/user/controllers/user-forgot-password.controller.js"></script>
+        <script src="scripts/user/controllers/location-corporate-index.controller.js"></script>
+        <script src="scripts/user/controllers/location-admin-index.controller.js"></script>
+        <script src="scripts/product/services/product.service.js"></script>
+        <script src="scripts/product/services/product.manager.js"></script>
+        <script src="scripts/product/services/pricing-template.manager.js"></script>
+        <script src="scripts/product/services/manufacturer.manager.js"></script>
+        <script src="scripts/product/services/category.manager.js"></script>
+        <script src="scripts/product/directives/get-manufacturers.js"></script>
+        <script src="scripts/product/directives/get-categories.js"></script>
+        <script src="scripts/product/directives/get-categories-attrs.js"></script>
+        <script src="scripts/product/directives/custom-attribute-form.js"></script>
+        <script src="scripts/product/directives/category-filter.js"></script>
+        <script src="scripts/product/controllers/manufacturer.controller.js"></script>
+        <script src="scripts/product/controllers/custom-items.controller.js"></script>
+        <script src="scripts/product/controllers/custom-items-by-account.controller.js"></script>
+        <script src="scripts/order/services/product-order.manager.js"></script>
+        <script src="scripts/order/services/order.manager.js"></script>
+        <script src="scripts/order/services/favorite.service.js"></script>
+        <script src="scripts/order/services/cart.service.js"></script>
+        <script src="scripts/order/directives/view-activity-button.js"></script>
+        <script src="scripts/order/directives/fulfillm-button.js"></script>
+        <script src="scripts/order/controllers/recent-orders.controller.js"></script>
+        <script src="scripts/order/controllers/received-orders.controller.js"></script>
+        <script src="scripts/order/controllers/pending-orders.controller.js"></script>
+        <script src="scripts/order/controllers/modify-pending-orders.controller.js"></script>
+        <script src="scripts/order/controllers/favorite-orders.controller.js"></script>
+        <script src="scripts/order/controllers/drafts-orders.controller.js"></script>
+        <script src="scripts/order/controllers/draft-view.controller.js"></script>
+        <script src="scripts/order/controllers/detail-order.controlller.js"></script>
+        <script src="scripts/order/controllers/cart.controller.js"></script>
+        <script src="scripts/order/controllers/admin-recent-order.js"></script>
+        <script src="scripts/order/controllers/admin-detail-order.controller.js"></script>
+        <script src="scripts/main/services/pagination.service.js"></script>
+        <script src="scripts/main/services/pagination.interceptor.js"></script>
+        <script src="scripts/main/services/event-dispatcher.js"></script>
+        <script src="scripts/main/services/check-unique.manager.js"></script>
+        <script src="scripts/main/services/auth.service.js"></script>
+        <script src="scripts/main/services/auth.interceptor.js"></script>
+        <script src="scripts/main/filters/types.js"></script>
+        <script src="scripts/main/filters/simpleFilter.js"></script>
+        <script src="scripts/main/filters/propsFilter.js"></script>
+        <script src="scripts/main/filters/orderId.js"></script>
+        <script src="scripts/main/filters/getOwner.js"></script>
+        <script src="scripts/main/filters/fullStateName.js"></script>
+        <script src="scripts/main/filters/delimiter.js"></script>
+        <script src="scripts/main/filters/applyFilter.js"></script>
+        <script src="scripts/main/directives/yes-no-modal.js"></script>
+        <script src="scripts/main/directives/unique-field.js"></script>
+        <script src="scripts/main/directives/ui-select-required.js"></script>
+        <script src="scripts/main/directives/sortings.js"></script>
+        <script src="scripts/main/directives/search-box.js"></script>
+        <script src="scripts/main/directives/scrollTo.js"></script>
+        <script src="scripts/main/directives/main-layout.js"></script>
+        <script src="scripts/main/directives/main-header.js"></script>
+        <script src="scripts/main/directives/main-footer.js"></script>
+        <script src="scripts/main/directives/loading.js"></script>
+        <script src="scripts/main/directives/isolate-model.js"></script>
+        <script src="scripts/main/directives/format.js"></script>
+        <script src="scripts/main/directives/file-model.js"></script>
+        <script src="scripts/main/directives/disable-by-promise.js"></script>
+        <script src="scripts/main/directives/custom-table.js"></script>
+        <script src="scripts/main/directives/cart-header.js"></script>
+        <script src="scripts/main/directives/button-loading.js"></script>
+        <script src="scripts/main/controllers/search.controller.js"></script>
+        <script src="scripts/main/controllers/report.controller.js"></script>
+        <script src="scripts/main/controllers/main.controller.js"></script>
+        <script src="scripts/index.module.js"></script>
+        <script src="scripts/tables.configs.js"></script>
+        <script src="scripts/index.value.js"></script>
+        <script src="scripts/index.run.js"></script>
+        <script src="scripts/index.constants.js"></script>
+        <script src="scripts/index.config.js"></script>
+        <!-- endinject -->
+
+        <!-- inject:partials -->
+        <!-- angular templates will be automatically converted in js and inserted here -->
+        <!-- endinject -->
+        <!-- endbuild -->
+    </body>
+</html>

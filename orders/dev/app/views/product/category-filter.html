@@ -1,0 +1,11 @@
+<div class="categories-list">
+    <strong>Categories</strong>
+    <hr>
+    <div ng-class="{ 'active': !categoryId }"
+         ng-click="filterByCategory()">
+        - All Categories</div>
+    <div ng-repeat="category in categories"
+         ng-click="filterByCategory(category.id)"
+         ng-class="{ 'active': category.id == categoryId }">
+        - {{ ::category.name }}</div>
+</div>

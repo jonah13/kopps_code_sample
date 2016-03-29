@@ -1,0 +1,136 @@
+<div class="bg-light lter b-b wrapper-md">
+    <div class="products-header">
+        <ol class="breadcrumb">
+            <li><a ng-click="$root.goToDashboard()"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Reports</a></li>
+        </ol>
+        <div class="pull-right">
+            <a href="{{ getExportLink('pdf') }}" target="_blank" class="btn btn-success btn-sm m-r-xs">Export to PDF</a>
+            <a href="{{ getExportLink('excel') }}" target="_blank" class="btn btn-success btn-sm">Export to Excel</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="wrapper-md">
+
+    <loading></loading>
+
+    <div class="filters export hbox">
+        <div class="col">
+            From
+            <input type="text"
+                   class="form-control m-l-sm"
+                   datepicker-popup="{{ format }}"
+                   ng-model="filters.from"
+                   is-open="datepickers.from"
+                   ng-click="openDatePicker('from')"
+                   close-text="Close">
+            <span class="input-group-btn m-r-lg">
+                <button type="button"
+                        class="btn btn-default"
+                        ng-click="openDatePicker('from')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+
+        <div class="col">
+            To
+            <input type="text"
+                   class="form-control m-l-sm"
+                   datepicker-popup="{{ format }}"
+                   ng-click="openDatePicker('to')"
+                   ng-model="filters.to"
+                   is-open="datepickers.to"
+                   close-text="Close" />
+            <span class="input-group-btn m-r-lg">
+                <button type="button"
+                        class="btn btn-default"
+                        ng-click="openDatePicker('to')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+
+        <div class="col">
+            <span class="export-label m-r-sm">Filter by</span>
+            <ui-select ng-model="filters.user">
+                <ui-select-match>{{ $select.selected.first_name }}</ui-select-match>
+                <ui-select-choices repeat="user.id as user in users | propsFilter: { first_name: $select.search }">
+                    <span ng-bind-html="user.first_name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <div class="col" ng-if="!auth.isCustomer()">
+            <span class="export-label m-r-sm">Location</span>
+            <ui-select ng-model="filters.location"
+                       ng-disabled="!locations.length">
+                <ui-select-match>{{ $select.selected.name }}</ui-select-match>
+                <ui-select-choices repeat="location.id as location in locations | propsFilter: { name: $select.search }">
+                    <span ng-bind-html="location.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+
+    <div class="alert alert-warning text-center m-t-lg" ng-hide="orders.length || inProgress">
+        There is not any submitted order in the system.
+    </div>
+
+    <table ng-show="orders.length && !inProgress" class="table table-bordered table-hover table-condensed bg-white-only m-t-md">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td>
+                Order ID
+                <span sortings="created_at" on-change="order(params)"></span>
+            </td>
+            <td class="v-middle">
+                PO number
+                <span sortings="created_at" on-change="order(params)"></span>
+            </td>
+            <td>
+                Order Date
+                <span sortings="created_at" on-change="order(params)"></span>
+            </td>
+            <td>
+                Number of Items
+                <span sortings="total_amount" on-change="order(params)"></span>
+            </td>
+            <td>
+                Total Price ($)
+                <span sortings="sum_price" on-change="order(params)"></span>
+            </td>
+            <td ng-if="!auth.isCustomer()">
+                Location (Facility)
+            </td>
+            <td>
+                Ordered By
+            </td>
+
+        </tr>
+        <tr ng-repeat="order in orders">
+            <td class="v-middle">
+                <span ng-bind="order.id | orderId"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="order.po"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="order.created_at"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="order.total_amount"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="order.sum_price | number:2"></span>
+            </td>
+            <td class="v-middle" ng-if="!auth.isCustomer()">
+                <span ng-bind="order.location_name"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="order.first_name"></span>
+            </td>
+        </tr>
+    </table>
+</div>

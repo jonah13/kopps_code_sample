@@ -1,0 +1,345 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a ui-sref="products.admin-list">Products</a></li>
+            <li><a>Create</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-8">
+            <form name="createProductForm"
+                  novalidate
+                  ng-submit="save(createProductForm.$valid)">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">New item form</div>
+                    <div class="panel-body create-account hbox">
+
+                        <div class="table-row">
+                            <div class="col">
+                                Manf ID
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="manf_id"
+                                           ng-model-options="{ debounce: 500 }"
+                                           name="manf_id"
+                                           unique-field="products"
+                                           ng-model="product.manf_id"
+                                           placeholder="Unique field"
+                                           ng-required="true"
+                                           class="form-control">
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.manf_id.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                    <div ng-message="unique" class="tooltips">
+                                        The inserted Manf ID is already in use
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                McKesson ID
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="mckesson_id"
+                                           ng-model-options="{ debounce: 500 }"
+                                           name="mckesson_id"
+                                           ng-model="product.mckesson_id"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Item Name
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="name"
+                                           name="name"
+                                           ng-model="product.name"
+                                           ng-required="true"
+                                           class="form-control">
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.name.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Manufacturer
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <ui-select id="manf"
+                                               name="manf"
+                                               ng-model="product.manf"
+                                               ng-required="true">
+                                        <ui-select-match placeholder="Select a manufacturer">{{ $select.selected.name }}</ui-select-match>
+                                        <ui-select-choices repeat="manufacturer.id as manufacturer in manufacturers | propsFilter: { name: $select.search }">
+                                            <span ng-bind-html="manufacturer.name | highlight: $select.search"></span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.manf.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Category
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <ui-select id="category"
+                                               name="category"
+                                               ng-model="product.category"
+                                               get-categories-attrs
+                                               ng-required="true">
+                                        <ui-select-match placeholder="Select a category">{{ $select.selected.name }}</ui-select-match>
+                                        <ui-select-choices repeat="category.id as category in categories | propsFilter: { name: $select.search }">
+                                            <span ng-bind-html="category.name | highlight: $select.search"></span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.category.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Item Image
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="file"
+                                           accept="image/*"
+                                           data-icon="false"
+                                           data-classbutton="btn btn-default"
+                                           data-classinput="form-control inline v-middle input-s"
+                                           id="file"
+                                           name="file"
+                                           tabindex="-1"
+                                           file-model="img"
+                                           style="position: absolute; clip: rect(0px 0px 0px 0px);">
+                                    <div class="bootstrap-filestyle input-group">
+                                        <input type="text"
+                                               id="file_text"
+                                               name="file_text"
+                                               placeholder="Please use .png image"
+                                               class="form-control"
+                                               ng-model="img.name">
+                                        <span class="group-span-filestyle input-group-btn">
+                                            <label for="file" class="btn btn-default">
+                                                <span class="glyphicon glyphicon-folder-open"></span> Choose file
+                                            </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Item description
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <textarea id="description"
+                                              name="description"
+                                              class="form-control"
+                                              ng-maxlength="500"
+                                              ng-model="product.description"
+                                              ng-required="true">
+                                    </textarea>
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.description.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                    <div ng-message="maxlength" class="tooltips">
+                                        You can't input more than 500 characters
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Unit of measure
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <ui-select id="uom"
+                                               name="uom"
+                                               ng-model="product.uom">
+                                        <ui-select-match placeholder="Select a uom">{{ $select.selected.name }}</ui-select-match>
+                                        <ui-select-choices repeat="uom.id as uom in uomsList | propsFilter: { name: $select.search }">
+                                            <span ng-bind-html="uom.name | highlight: $select.search"></span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Unit of Quantity
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="available_quantity"
+                                           name="available_quantity"
+                                           ng-model="product.available_quantity"
+                                           ng-pattern="/[0-9]+([,\.][0-9]+)?/"
+                                           class="form-control">
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.available_quantity.$error">
+                                    <div ng-message="pattern" class="tooltips">
+                                        Quantity should contain only numbers
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col"></div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="checkbox"
+                                           id="only_one"
+                                           ng-model="product.only_one">
+                                    <label for="only_one">
+                                        only allow 1 purchase unit for each customer to add to the order
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Default Price ($)
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="default_price"
+                                           name="default_price"
+                                           ng-pattern="/[0-9]+([,\.][0-9]+)?/"
+                                           ng-required="true"
+                                           ng-model="product.default_price"
+                                           class="form-control">
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.default_price.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                    <div ng-message="pattern" class="tooltips">
+                                        Price should contain only numbers
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">Purchase Price (amt) ($)</div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="amt"
+                                           name="amt"
+                                           ng-pattern="/[0-9]+([,\.][0-9]+)?/"
+                                           ng-model="product.amt"
+                                           class="form-control">
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm.amt.$error">
+                                    <div ng-message="pattern" class="tooltips">
+                                        Price should contain only numbers
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row" ng-repeat="attribute in categoryAttrs">
+                            <div class="col capitalize">
+                                {{ attribute.name }}
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+
+                                    <input type="text"
+                                           ng-show="attribute.type == 'input'"
+                                           id="{{ attribute.name }}"
+                                           name="{{ attribute.name }}"
+                                           ng-model="product[attribute.name]"
+                                           ng-required="true"
+                                           class="form-control">
+
+                                    <ui-select id="{{ attribute.name }}"
+                                               name="{{ attribute.name }}"
+                                               ng-show="attribute.type == 'select'"
+                                               ng-model="product[attribute.name]"
+                                               ng-required="true">
+                                        <ui-select-match>{{ $select.selected }}</ui-select-match>
+                                        <ui-select-choices repeat="value in attribute.select_values | simpleFilter: $select.search track by $index">
+                                            <span ng-bind-html="value | highlight: $select.search"></span>
+                                        </ui-select-choices>
+                                    </ui-select>
+
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="createProductForm[attribute.name].$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="table-row account-buttons">
+                            <div class="col"></div>
+                            <div class="col padding-top">
+                                <button class="btn btn-success pull-right" type="submit">Save</button>
+                                <button class="btn btn-danger pull-right m-r-sm" ui-sref="products.admin-list">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

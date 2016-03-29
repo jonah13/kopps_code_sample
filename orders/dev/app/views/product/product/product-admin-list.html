@@ -1,0 +1,99 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Products</a></li>
+        </ol>
+        <a href="{{ getExportLink('excel') }}" target="_blank" class="btn btn-warning btn-sm pull-right m-l-xs">Export to Excel</a>
+        <button class="btn btn-sm btn-success pull-right" ui-sref="products.create">Add new product</button>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <div class="row m-b-md" ng-show="products.length">
+        <ui-select  class="col-md-3" ng-model="filters.category" get-categories>
+            <ui-select-match allow-clear placeholder="Select a category">{{ $select.selected.name }}</ui-select-match>
+            <ui-select-choices repeat="category.id as category in categories | propsFilter: { name: $select.search }">
+                <span ng-bind-html="category.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
+
+        <ui-select class="col-md-3" ng-model="filters.manufacturerId" get-manufacturers>
+            <ui-select-match allow-clear placeholder="Select a manufacturer">{{ $select.selected.name }}</ui-select-match>
+            <ui-select-choices repeat="manf.id as manf in manfs | propsFilter: { name: $select.search }">
+                <span ng-bind-html="manf.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
+
+        <div class="inner-addon right-addon m-n col-md-3">
+            <!--<i class="fa fa-times" ng-click="filters.substr = ''"></i>-->
+            <input type="text"
+                   ng-model="filters.substr"
+                   ng-model-options="{ debounce: 400 }"
+                   placeholder="Manf ID / Item name / McKesson ID"
+                   class="form-control">
+        </div>
+    </div>
+
+    <loading></loading>
+
+    <div class="alert alert-warning text-center" ng-hide="products.length || inProgress">
+        You did not create any product yet.
+    </div>
+
+    <table ng-show="products.length" class="table table-bordered table-hover table-condensed bg-white-only">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td width="10%">
+                Mnf ID
+                <span sortings="manf_id" on-change="order(params)"></span>
+            </td>
+            <td width="20%">
+                Product Name
+                <span sortings="name" on-change="order(params)"></span>
+            </td>
+            <td width="15%">
+                Category
+                <span sortings="category_name" on-change="order(params)"></span>
+            </td>
+            <td width="20%">
+                Manufacturer
+                <span sortings="manf_name" on-change="order(params)"></span>
+            </td>
+            <td width="15%">
+                Default Price
+                <span sortings="default_price" on-change="order(params)"></span>
+            </td>
+            <td width="15%">Actions</td>
+        </tr>
+        <tr ng-repeat="product in products">
+            <td class="v-middle">
+                <span ng-bind="product.manf_id"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.name"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.category_name"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.manf_name"></span>
+            </td>
+            <td class="v-middle">
+                $<span ng-bind="product.default_price"></span>
+            </td>
+            <td class="v-middle">
+                <div class="buttons">
+                    <button class="btn btn-sm btn-info" ui-sref="products.edit({ productId: product.id })">Edit</button>
+                    <button class="btn btn-sm btn-danger"
+                            ng-hide="product.removed"
+                            yes-no-modal="REMOVE_PRODUCT"
+                            on-confirm="remove(product.id)">Deactivate</button>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="continue(product.id)"
+                            ng-show="product.removed">Activate</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

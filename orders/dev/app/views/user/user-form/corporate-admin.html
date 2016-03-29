@@ -1,0 +1,207 @@
+<form name="userCreateForm"
+      id="userCreateForm"
+      novalidate>
+    <div class="panel-body hbox">
+        <div class="table-row">
+            <div class="col">
+                Parent Account Name
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <ui-select name="account"
+                               id="account"
+                               ng-model="user.account"
+                               err-border="userCreateForm"
+                               ng-required="true">
+                        <ui-select-match placeholder="Select an account">{{ $select.selected.name }}</ui-select-match>
+                        <ui-select-choices repeat="account.id as account in accounts | propsFilter: { name: $select.search }">
+                            <span ng-bind-html="account.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <!-- validation messages-->
+                    <div ng-show="isSubmitted" ng-messages="userCreateForm.account.$error">
+                        <div ng-message="required" class="tooltips">
+                            You must select Parent Account name
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- full user's name -->
+        <div class="table-row">
+            <div class="col">
+                Full Name (contact name)
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           name="first_name"
+                           id="first_name"
+                           ng-model="user.first_name"
+                           class="form-control"
+                           ng-required="true">
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.first_name.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- username -->
+        <div class="table-row">
+            <div class="col">
+                Username
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group inner-addon right-addon">
+                    <i class="fa fa-question-circle" ng-click="isSubmitted = false;userNameInfo = true;"></i>
+                    <input type="text"
+                           ng-if="$root.$state.current.name === 'user.main.edit'"
+                           edit-id="user.id"
+                           name="username"
+                           id="username"
+                           ng-model="user.username"
+                           unique-field="users"
+                           placeholder="At least 6 characters"
+                           ng-model-options="{ debounce: { default: 200, blur: 0 } }"
+                           class="form-control"
+                           ng-pattern="/^[a-zA-Z][\w._]{5,}$/"
+                           ng-required="true">
+
+                    <input type="text"
+                           ng-if="$root.$state.current.name !== 'user.main.edit'"
+                           name="username"
+                           id="username"
+                           ng-model="user.username"
+                           unique-field="users"
+                           placeholder="At least 6 characters"
+                           ng-model-options="{ debounce: { default: 200, blur: 0 } }"
+                           class="form-control"
+                           ng-pattern="/^[a-zA-Z][\w._]{5,}$/"
+                           ng-required="true">
+                </div>
+
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.username.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                    <div ng-message="unique" class="tooltips">
+                        The inserted username is already in use
+                    </div>
+                    <div ng-message="pattern" class="tooltips big-tooltip">
+                        Please input at least 6 chars, start with letter/s, could be included with numbers or . or _
+                    </div>
+                </div>
+                <div ng-show="userNameInfo" class="tooltips">
+                    ex: Mike1986, MikeHardy, Mike.Hardy, Mike_Hardy
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">
+                Email
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="email"
+                           name="email"
+                           ng-if="$root.$state.current.name === 'user.main.edit'"
+                           id="email"
+                           edit-id="user.id"
+                           unique-field="users"
+                           placeholder="unique"
+                           ng-model="user.email"
+                           ng-model-options="{ debounce: 500 }"
+                           class="form-control"
+                           ng-required="true">
+                    <input type="email"
+                           name="email"
+                           ng-if="$root.$state.current.name !== 'user.main.edit'"
+                           id="email"
+                           unique-field="users"
+                           placeholder="unique"
+                           ng-model="user.email"
+                           ng-model-options="{ debounce: 500 }"
+                           class="form-control"
+                           ng-required="true">
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.email.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                    <div ng-message="email" class="tooltips">
+                        Requires valid email
+                    </div>
+                    <div ng-message="unique" class="tooltips">
+                        The inserted email is already in use
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">
+                Password
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="{{ showPassword ? 'text' : 'password' }}"
+                           name="password"
+                           id="password"
+                           ng-model="user.password"
+                           ng-minlength="6"
+                           err-border="userCreateForm"
+                           placeholder="at least 6 characters"
+                           class="form-control"
+                           ng-required="$root.$state.current.name !== 'user.main.edit'">
+                                        <span ng-click="showPassword = !showPassword" class="show-pass">
+                                            <i class="fa {{ showPassword ? 'fa-eye-slash' : 'fa-eye' }}"></i>
+                                        </span>
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.password.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                    <div ng-message="minlength" class="tooltips">
+                        You should input at least 6 characters
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">Phone</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           name="phone"
+                           id="phone"
+                           ng-model="user.phone"
+                           ng-pattern="/^[0-9]+$/"
+                           err-border="userCreateForm"
+                           placeholder="only numbers"
+                           class="form-control">
+                </div>
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.phone.$error">
+                    <div ng-message="pattern" class="tooltips">
+                        Phone should contain numbers only
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>

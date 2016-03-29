@@ -1,0 +1,259 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.corporate_admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a ui-sref="order.pending">Pending orders</a></li>
+            <li><a>Modify</a></li>
+        </ol>
+
+    </div>
+</div>
+
+<div class="wrapper-md product-content modify-pending-orders">
+    <div class="row">
+        <div class="col-lg-9">
+            <h2 class="m-l-xs">Order details</h2>
+
+            <loading></loading>
+
+            <div class="product-grey-border product-grey-back m-b-lg hbox wrapper-sm" ng-hide="!order && inProgress">
+                <div class="col">
+                    <div><b>Location/Facility Name:</b> {{ order.location_name1 || order.location_name2 }}</div>
+                    <div><b>Submitted by:</b> {{ order.submitted_by || order.user_name }}</div>
+                </div>
+                <div class="col">
+                    <div><b>Order Date:</b> {{ ::order.updated_at }}</div>
+                    <div><b>Order ID:</b> {{ order.id | orderId }}</div>
+                </div>
+            </div>
+
+            <div class="row m-b-md">
+                <pagination ng-model="orderPagination.currentPage"
+                            ng-show="products"
+                            items-per-page="orderPagination.perPage"
+                            previous-text="Prev"
+                            style="margin: 0;"
+                            boundary-links="true"
+                            class="pagination-sm pull-right"
+                            total-items="orderPagination.total">
+                </pagination>
+
+                <ui-select class="m-r-xs inline-block pull-right"
+                           style="width: 80px;"
+                           search-enabled="true"
+                           ng-model="orderPagination.perPage">
+                    <ui-select-match>{{ $select.selected }}</ui-select-match>
+                    <ui-select-choices repeat="i in perPage">
+                        {{ i }}
+                    </ui-select-choices>
+                </ui-select>
+                <div class="inline-block m-t-xs m-r-xs pull-right">Show per page: </div>
+            </div>
+
+            <div class="alert alert-warning text-center" ng-show="!orderProducts.length && !inProgress">
+                There are not any products.
+            </div>
+
+            <div class="row products product-grey-border product-grey-back"
+                 ng-class="{ 'discontinued': product.removed }"
+                 ng-repeat="product in orderProducts.slice(((orderPagination.currentPage - 1) * orderPagination.perPage), ((orderPagination.currentPage) * orderPagination.perPage))">
+
+                <div class="corner-ribbon">Inactive</div>
+
+                <div class="col-lg-2">
+                    <img ng-src="assets/images/{{ product.img || 'default.png' }}">
+                </div>
+
+                <div class="col-lg-10 product-cart-description">
+                    <div class="product-line">
+                        <div class="title"
+                             ng-bind="product.name"
+                             ui-sref="products.show({ productId: product.id })"></div>
+                        <div class="brand" ng-bind="product.category_name" ui-sref="products.index({ categoryId: product.category })"></div>
+
+                        <div class="pull-right product-quantity">
+                            <span ng-bind="product.uom_name"></span>
+                            <span> / </span>
+                            <span ng-bind="product.uom_abbr"></span>
+
+                            <div class="price"> Price: {{ product.price | number:2 }}$</div>
+                            <div class="qty">
+                                <div>Qty:</div>
+                                <div>
+                                    <input class="form-control input-sm quantity"
+                                           ng-model="product.quantity"
+                                           ng-disabled="product.only_one || product.removed"
+                                           ng-change="checkQuantity(product.quantity, $index)"
+                                           format="integer">
+                                </div>
+                                <div class="remove">
+                                    <i class="fa fa-trash-o"
+                                       ng-click="removeProduct($index)"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-line">
+                        <div>{{ product.manf_name }}, {{ product.manf_id }}</div>
+                    </div>
+                    <div>
+                        {{ product.description | limitTo: 320 }}...
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-success w-full"
+               ng-hide="!order && inProgress"
+               custom-scroll="products"
+               on-start="showCatalog()">
+                <span ng-show="visibleList">I'm done of adding items to the list</span>
+                <span ng-hide="visibleList">Add more items to the order</span>
+            </button>
+
+            <div class="panel panel-default m-t-md" id="products" ng-if="visibleList">
+                <div class="panel-heading font-bold">Adding new products to the order</div>
+                <div class="panel-body create-account hbox">
+                    <div class="in-line m-t-md">
+                        <div class="form-group w-md">
+                            <ui-select ng-model="filters.categoryId" get-categories>
+                                <ui-select-match allow-clear placeholder="Select a category">{{ $select.selected.name }}</ui-select-match>
+                                <ui-select-choices repeat="category.id as category in categories | propsFilter: { name: $select.search }">
+                                    <span ng-bind-html="category.name | highlight: $select.search"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="form-group w-md m-l">
+                            <ui-select ng-model="filters.manufacturerId" get-manufacturers>
+                                <ui-select-match allow-clear placeholder="Select a manufacturer">{{ $select.selected.name }}</ui-select-match>
+                                <ui-select-choices repeat="manf.id as manf in manfs | propsFilter: { name: $select.search }">
+                                    <span ng-bind-html="manf.name | highlight: $select.search"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="pull-right m-l">
+                            <button class="btn btn-default" ng-click="getProducts()">Search</button>
+                        </div>
+
+                        <div class="w-md pull-right">
+                            <input type="text"
+                                   ng-model="filters.substr"
+                                   placeholder="Mnf ID / Item Name"
+                                   ng-keyup="$event.keyCode == 13 && getProducts()"
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning text-center" ng-show="!products.length && !inProgress">
+                        There are not any products.
+                    </div>
+
+                    <div class="row products product-grey-border product-grey-back"
+                         ng-class="{ 'discontinued': product.removed }"
+                         ng-repeat="product in products">
+                        <div class="corner-ribbon">Inactive</div>
+                        <div class="col-lg-2">
+                            <img ng-src="assets/images/{{ product.img || 'default.png' }}">
+                        </div>
+                        <div class="col-lg-10 product-cart-description">
+                            <div class="product-line">
+                                <div class="title"
+                                     ng-bind="product.name"
+                                     ui-sref="products.show({ productId: product.id })"></div>
+                                <div class="brand" ng-bind="product.category_name" ui-sref="products.index({ categoryId: product.category })"></div>
+
+                                <div class="pull-right product-quantity">
+                                    <span ng-bind="product.uom_name"></span>
+
+                                    <div class="price"> Price: {{ product.price | number:2 }}$</div>
+                                    <div class="qty">
+                                        <div>Qty:</div>
+                                        <div>
+                                            <input class="form-control input-sm quantity"
+                                                   ng-init="quantity = 1"
+                                                   ng-model="quantity"
+                                                   ng-disabled="product.only_one || product.removed"
+                                                   format="integer">
+                                        </div>
+                                        <div class="add m-l-xs">
+                                            <i class="fa fa-plus-circle" ng-click="addProduct(product, quantity)"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-line">
+                                <div>{{ product.manf_name }}, {{ product.manf_id }}</div>
+                            </div>
+                            <div>
+                                {{ product.description | limitTo: 320 }}...
+                            </div>
+                        </div>
+                    </div>
+                    <pagination ng-model="productPagination.currentPage"
+                                ng-show="products"
+                                items-per-page="productPagination.perPage"
+                                previous-text="Prev"
+                                style="margin: 0;"
+                                max-size="10"
+                                boundary-links="true"
+                                class="pagination-sm pull-right"
+                                total-items="productPagination.total"
+                                ng-change="getProducts()">
+                    </pagination>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <form name="modifyOrderForm">
+                <div class="product-grey-border product-grey-back cart-buttons wrapper">
+                    <div class="price m-t-sm text-center">
+                        Total ({{ productSvc.getSumAmount(orderProducts) }} items):
+                    <span class=" usa-icon fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-usd fa-stack-1x fa-inverse"></i>
+                    </span>
+                        {{ productSvc.getSumPrice(orderProducts) | number:2 }}
+                    </div>
+                    <input class="form-control"
+                           ng-model="order.po"
+                           ng-required="true"
+                           placeholder="Please fill in the PO number">
+
+                    <textarea class="form-control"
+                              ng-model="order.notes"
+                              placeholder="Notes"
+                              maxlength="100"
+                              style="resize: none;"></textarea>
+
+                    <button class="btn m-b-xs w-xs btn-success"
+                            type="submit"
+                            yes-no-modal="APPROVE_ORDER"
+                            on-confirm="order.po && submit(true)"
+                            ng-disabled="!orderProducts.length">
+                        Save and Approve Order
+                    </button>
+
+                    <button class="btn m-b-xs w-xs btn-info"
+                            type="submit"
+                            ng-click="order.po && submit(false)">
+                        Save the changes & Exit
+                    </button>
+
+                    <button class="btn m-b-xs w-xs btn-danger"
+                            yes-no-modal="REJECT_ORDER"
+                            on-confirm="reject()">
+                        Reject the order
+                    </button>
+
+                    <button class="btn m-b-xs w-xs btn-danger" ui-sref="order.pending">
+                        Close without saving changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

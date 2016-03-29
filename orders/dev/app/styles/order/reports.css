@@ -1,0 +1,23 @@
+.export div input, .export .ui-select-container {
+    width: 70%;
+}
+.export span button {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.export div span, .export div input, .export .export-label, .export .ui-select-container  {
+    display: inline-block;
+}
+.export span {
+    left: -4px;
+    bottom: 2px;
+}
+.export input:focus + span button {
+    border-left-color: #23b7e5;
+}
+
+.export .col.btn {
+    width: 50%;
+    height: 34px;
+    bottom: 3px;
+}

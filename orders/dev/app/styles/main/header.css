@@ -1,0 +1,50 @@
+.nav .header-cart i {
+    font-size: 20px;
+}
+
+.nav .header-cart i.icon-basket span {
+    display: none;
+}
+
+.nav .header-cart i.icon-basket-loaded span {
+    font-size: 50%;
+    display: inline-block;
+}
+
+.nav .header-cart i .up {
+    margin-left: -5px;
+}
+
+.nav .header-cart a {
+    line-height: 20px;
+    position: relative;
+    display: block;
+    padding: 13px;
+}
+
+.header-cart:hover {
+    background-color: #17b2e2;
+}
+
+.header-cart .remove-all:hover, .header-cart .open-cart:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.nav .header-cart .product-title:hover {
+    cursor: pointer;
+    color: #337ab7;
+}
+
+.nav .header-cart .cart-products {
+    border-bottom: 1px solid #dee5e7;
+}
+
+.cart-block {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.app-header.navbar {
+    z-index: 99999;
+}

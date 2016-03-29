@@ -1,0 +1,50 @@
+<ul class="nav navbar-nav">
+    <li ui-sref-active="active">
+        <a ui-sref="main.dashboard">
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="dropdown pos-stc" dropdown="">
+        <a href="" class="dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+            <span>Orders</span>
+            <span class="caret"></span>
+        </a>
+        <div class="dropdown-menu wrapper w bg-white">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="list-unstyled l-h-2x">
+                        <li>
+                            <a ui-sref="order.recent">
+                                <i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>
+                                <span>Recent orders</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a ui-sref="order.drafts">
+                                <i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>
+                                <span>Drafts</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <li ui-sref-active="active">
+        <a ui-sref="order.favorite">
+            <span>Favorite lists</span>
+        </a>
+    </li>
+
+    <li ui-sref-active="active">
+        <a ui-sref="products.index">
+            <span>Products</span>
+        </a>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="main.report">
+            <span>Reports</span>
+        </a>
+    </li>
+</ul>

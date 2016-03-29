@@ -1,0 +1,14 @@
+.account-search-box {
+    width: 37%;
+}
+.accounts-table {
+    margin-top: 30px;
+}
+
+.custom-price input {
+    display: inline-block;
+}
+
+.custom-price input[type=text] {
+    width: 80%;
+}

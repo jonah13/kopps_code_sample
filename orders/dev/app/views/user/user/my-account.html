@@ -1,0 +1,84 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Account information</h1>
+</div>
+
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <table class="table table-striped m-b-none">
+                    <tbody>
+                        <tr>
+                            <th>User info.</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>Full Name(contact name)</td>
+                            <td ng-bind="::user.first_name"></td>
+                        </tr>
+                        <tr>
+                            <td>Username</td>
+                            <td ng-bind="::user.username"></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td ng-bind="::user.email"></td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td ng-bind="::user.email"></td>
+                        </tr>
+                        <tr>
+                            <th>Customer Address.</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>Address 1</td>
+                            <td ng-bind="::user.location.address_1"></td>
+                        </tr>
+                        <tr>
+                            <td>Address 2</td>
+                            <td ng-bind="::user.location.address_2"></td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td ng-bind="::user.location.city"></td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td ng-bind="::user.location.state | fullStateName"></td>
+                        </tr>
+                        <tr>
+                            <td>Zip</td>
+                            <td ng-bind="::user.location.zip"></td>
+                        </tr>
+                        <tr>
+                            <th>Customer Shipping Address.</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>Shipping Address 1</td>
+                            <td ng-bind="::user.shipping_address_1 || user.location.address_1"></td>
+                        </tr>
+                        <tr>
+                            <td>Shipping Address 2</td>
+                            <td ng-bind="::user.shipping_address_2 || user.location.address_2"></td>
+                        </tr>
+                        <tr>
+                            <td>Shipping City</td>
+                            <td ng-bind="::user.shipping_city || user.location.city"></td>
+                        </tr>
+                        <tr>
+                            <td>Shipping State</td>
+                            <td ng-bind="::user.shipping_state || user.location.state | fullStateName"></td>
+                        </tr>
+                        <tr>
+                            <td>Shipping Zip</td>
+                            <td ng-bind="::user.shipping_zip || user.location.zip"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

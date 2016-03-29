@@ -1,0 +1,17 @@
+<h4 class="text-center">Please select favorite list</h4>
+
+<div class="modal-body">
+    <div class="product-grey-border product-grey-back multiple-select">
+        <label class="wrapper-xs"
+               ng-class="{ 'bg-light dk' : isActive(list.id) }"
+               ng-repeat="list in favoriteLists track by $index">
+            {{ ::list.name }}
+            <input type="checkbox" ng-click="change(list.id, $index)" ng-checked="isActive(list.id)" class="pull-right">
+        </label>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn w-xs btn-danger" ng-click="$dismiss()">Cancel</button>
+    <button class="btn w-xs btn-success" ng-click="$close(active)">Save</button>
+</div>

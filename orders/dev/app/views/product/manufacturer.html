@@ -1,0 +1,75 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Manufacturers</a></li>
+        </ol>
+        <button class="btn btn-success btn-sm pull-right add-location" ng-click="add()">Add manufacturer</button>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <div class="row m-b-md">
+        <div class="inner-addon right-addon m-n col-md-3">
+            <!--<i class="fa fa-times" ng-click="filters.substr = ''"></i>-->
+            <input type="text"
+                   ng-model="substr"
+                   ng-model-options="{ debounce: 400 }"
+                   placeholder="Search by manufacturer name"
+                   class="form-control">
+        </div>
+    </div>
+
+    <loading></loading>
+
+    <div class="alert alert-warning text-center" ng-hide="manufacturers.length || inProgress">
+        There is not any manufacturer in the system.
+    </div>
+
+    <table ng-show="manufacturers.length" class="table table-bordered table-hover table-condensed bg-white-only">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td>
+                Manufacturer Name
+                <span sortings="name" on-change="order(params)"></span>
+            </td>
+            <td>Actions</td>
+
+        </tr>
+        <tr ng-repeat="manufacturer in manufacturers">
+            <td class="v-middle" width="80%">
+                 <span editable-text="manufacturer.name"
+                       ng-bind="manufacturer.name"
+                       e-name="name"
+                       e-form="rowform"
+                       onbeforesave="checkName($data, user.id)">
+                 </span>
+            </td>
+            <td class="v-middle" width="30%">
+                <form editable-form
+                      name="rowform"
+                      ng-show="rowform.$visible"
+                      shown="inserted == manufacturer"
+                      oncancel="cancel($index)"
+                      onaftersave="save(manufacturer, manufacturer.id, $index)"
+                      class="form-buttons form-inline">
+                    <button type="submit"
+                            ng-disabled="rowform.$waiting"
+                            class="btn btn-sm btn-info">
+                        Save
+                    </button>
+                    <button type="button"
+                            ng-disabled="rowform.$waiting"
+                            ng-click="rowform.$cancel()"
+                            class="btn btn-sm btn-default">
+                        Cancel
+                    </button>
+                </form>
+                <div class="buttons" ng-show="!rowform.$visible">
+                    <button class="btn btn-sm btn-info" ng-click="rowform.$show()">Edit</button>
+                    <button class="btn btn-sm btn-danger" ng-click="remove(manufacturer.id, manufacturer.products)">Remove</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

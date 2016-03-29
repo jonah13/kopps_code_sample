@@ -1,0 +1,73 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Custom Items</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+    <div class="row">
+
+        <loading></loading>
+
+        <div class="col-sm-9">
+            <div class="panel panel-default" ng-show="accounts.length">
+                <div class="panel-heading font-bold">Show/Hide & Pricing Items</div>
+
+                <div class="panel-body">
+
+                    <div class="in-line">
+                        <div>
+                            <span>Main Account ID / Main Account Name:</span>
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-default" ng-click="getAccounts(substr)">Search</button>
+                        </div>
+                        <div class="pull-right account-search-box m-r-sm">
+                            <div class="inner-addon right-addon">
+                                <i class="fa fa-times" ng-click="substr = ''"></i>
+                                <input type="text"
+                                       ng-model="substr"
+                                       ng-keyup="$event.keyCode == 13 && getAccounts(substr)" 
+                                       placeholder="Type the ID / Account Name"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert clearfix m-t-lg alert-warning text-center" ng-hide="accounts.length">
+                        There is not any account in the system.
+                    </div>
+
+                    <table ng-show="accounts.length" class="table table-bordered accounts-table table-condensed bg-white-only">
+                        <tr style="font-weight: bold" class="product-grey-back">
+                            <td width="10%">Account ID</td>
+                            <td width="26%">Account Name</td>
+                            <td width="26%">Account Type</td>
+                            <td width="15%">Actions</td>
+                        </tr>
+                        <tr ng-repeat="account in accounts" ng-class="{ 'product-grey-back': account.id == selectedAccount }">
+                            <td>#{{ account.account_id }}</td>
+                            <td ng-bind="account.name"></td>
+                            <td class="capitalize" ng-bind="account.type"></td>
+                            <td>
+                                <button class="btn btn-sm btn-info" ui-sref="products.custom-items-by-account({ accountId: account.id })">Update Custom Items</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <pagination ng-model="accountPagination.currentPage"
+                                items-per-page="accountPagination.perPage"
+                                previous-text="Prev"
+                                ng-show="accounts.length"
+                                style="margin: 0;"
+                                class="pagination-sm pull-right"
+                                total-items="accountPagination.total"
+                                ng-change="getAccounts()">
+                    </pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

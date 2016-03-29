@@ -1,0 +1,125 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Favorite lists</a></li>
+            <li><a>{{ active.name }}</a></li>
+        </ol>
+
+        <div class="product-sort pull-right">
+            <label class="m-r-sm">
+                <span>Product name</span>
+                <span sortings="name" on-change="order(params)"></span>
+            </label>
+            <label class="m-r-sm">
+                <span>Price</span>
+                <span sortings="price" on-change="order(params)"></span>
+            </label>
+            <label class="m-r-sm">
+                <span>Category name</span>
+                <span sortings="category_name" on-change="order(params)"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper-md product-content">
+
+    <loading></loading>
+
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="inner-addon right-addon">
+                <i class="fa fa-times" ng-click="search = ''"></i>
+                <input type="text"
+                       ng-model="search"
+                       ng-model-options="{ debounce: 1000 }"
+                       class="form-control"
+                       placeholder="Search accross all lists">
+            </div>
+
+            <div class="categories-list">
+
+                <strong>Your lists</strong>
+                <hr>
+                <div ng-repeat="list in favorite.getLists() track by $index"
+                     ng-click="select(list)"
+                     ng-class="{ 'active': list.id == active.id }">
+                    - {{ list.name }}({{ list.total_products || 0 }})
+                </div>
+                <hr>
+                <button class="btn m-b-xs w-xs btn-success"
+                        yes-no-modal="ADD_FAVORITE_LIST"
+                        on-confirm="favorite.addList(data)">Create new</button>
+                <button class="btn m-b-xs w-xs btn-info"
+                        yes-no-modal="MANAGE_FAVORITE_LIST"
+                        on-confirm="favorite.renameRemoveList(data)">Manage lists</button>
+            </div>
+        </div>
+        <div class="col-lg-10">
+
+            <div class="alert alert-warning text-center" ng-show="!products.length && !search && !inProgress">
+                No items are added to the selected list.
+            </div>
+
+            <div class="alert alert-warning text-center" ng-show="!products.length && search && !inProgress">
+                Can't find anything, please retry something else.
+            </div>
+
+            <div class="products-list">
+                <div class="row products product-grey-border product-grey-back"
+                     ng-class="{ 'discontinued': product.removed }"
+                     ng-repeat="product in products track by $index">
+
+                    <div class="corner-ribbon">Inactive</div>
+
+                    <div class="col-lg-2">
+                        <img ng-src="assets/images/{{ product.img || 'default.png' }}">
+                    </div>
+                    <div class="col-lg-10">
+                        <div class="product-line">
+                            <div class="title"
+                                 ng-bind="product.name"
+                                 ui-sref="products.show({ productId: product.id })"></div>
+                            <div class="brand" ng-bind="product.category_name" ui-sref="products.index({ categoryId: product.category })"></div>
+
+                            <div class="pull-right product-quantity">
+
+                                <span ng-bind="product.uom_name"></span>
+
+                                <div class="price">Price: {{ product.price | number:2 }}</div>
+
+                                <div class="qty">
+                                    <div>Qty:</div>
+                                    <div>
+                                        <input class="form-control input-sm quantity"
+                                               ng-init="quantity = 1"
+                                               ng-model="quantity"
+                                               ng-disabled="product.only_one || product.removed"
+                                               format="integer">
+                                    </div>
+                                </div>
+                                <div class="cart">
+                                    <i class="icon-basket" ng-click="cart.addProduct(product, quantity)"></i>
+                                </div>
+
+                                <div class="remove">
+                                    <i class="fa fa-trash-o"
+                                       ng-show="active"
+                                       ng-click="removeProduct(product.id, active.id, $index)"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="product-line">
+                            <div>{{ product.manf_name }}, {{ product.manf_id }}</div>
+                        </div>
+                        <div>
+                            {{ product.description | limitTo: 320 }}...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

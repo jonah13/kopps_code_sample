@@ -1,0 +1,49 @@
+<div class="custom-attribute pull-left product-grey-border product-grey-back wrapper-sm hbox m-b-sm">
+    <form name="categoryAttributeForm" novalidate>
+        <div class="col">
+            <input type="text"
+                   id="attr-name{{ attributeIndex }}"
+                   name="attr-name{{ attributeIndex }}"
+                   ng-model="attribute.name"
+                   ng-required="true"
+                   class="form-control col">
+            <div ng-show="isSubmitted" ng-messages="categoryAttributeForm['attr-name' + attributeIndex].$error" class="relative-block">
+                <div ng-message="required" class="tooltips-before small">
+                    Required...
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <select class="form-control col"
+                    ng-model="attribute.type"
+                    ng-change="changeType()"
+                    ng-options="type.value as type.title for type in types"></select>
+        </div>
+
+        <div class="col">
+            <div ng-show="attribute.type == 'select'"
+                 ng-repeat="field in attribute.selectValues track by $index"
+                 class="attributes">
+                <input type="text"
+                       id="attr{{ $index }}"
+                       name="attr{{ $index }}"
+                       ng-model="attribute.selectValues[$index]"
+                       ng-required="true"
+                       class="form-control m-b-sm">
+                <i class="fa fa-trash-o m-l-xs"
+                   ng-click="removeField($index)"
+                   ng-show="$index > 0"></i>
+                <i class="fa fa-plus-circle m-l-xs"
+                   ng-click="addField()"
+                   ng-show="$last"></i>
+
+                <div ng-show="isSubmitted" ng-messages="categoryAttributeForm['attr' + $index].$error" class="relative-block">
+                    <div ng-message="required" class="tooltips category-tooltip">
+                        Required...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

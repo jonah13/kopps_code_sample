@@ -1,0 +1,36 @@
+<div>
+    <input type="text"
+           ng-model="filters.substr"
+           class="form-control"
+           ng-keyup="$event.keyCode == 13 && search()"
+           placeholder="Text/key phrase">
+
+    <div class="form-group m-t-sm m-b-sm">
+        <ui-select ng-model="filters.categoryId" get-categories>
+            <ui-select-match allow-clear placeholder="Select a category">{{ $select.selected.name }}</ui-select-match>
+            <ui-select-choices repeat="category.id as category in categories | propsFilter: { name: $select.search }">
+                <span ng-bind-html="category.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="form-group m-b-sm">
+        <ui-select ng-model="filters.manufacturerId" get-manufacturers>
+            <ui-select-match allow-clear placeholder="Select a manufacturer">{{ $select.selected.name }}</ui-select-match>
+            <ui-select-choices repeat="manf.id as manf in manfs | propsFilter: { name: $select.search }">
+                <span ng-bind-html="manf.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <button class="btn btn-info w-full" ui-sref="main.search(filters)">
+        Search
+    </button>
+
+    <div class="line b-b"></div>
+
+    <div class="dashboard-links">
+        <a ui-sref="products.index({ customPrice: true })">Contract pricing</a><br>
+        <a ui-sref="products.index">Show product catalog</a>
+    </div>
+</div>

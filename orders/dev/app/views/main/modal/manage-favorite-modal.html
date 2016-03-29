@@ -1,0 +1,39 @@
+<h4 class="text-center">Manage favorite orders</h4>
+
+<form>
+    <div class="modal-body">
+        <div class="panel panel-default manage-table">
+            <table class="table table-striped m-b-none">
+                <tbody>
+                <tr>
+                    <th>Favorite list</th>
+                    <th>Delete</th>
+                </tr>
+                <tr ng-repeat="list in favoriteLists track by $index">
+                    <td>
+                        <input class="form-control"
+                               maxlength="20"
+                               ng-model="list.name"
+                               ng-change="change($index)"
+                               ng-keyup="$event.keyCode == 13 && $close(favoriteLists)"
+                               ng-disabled="list.name == 'Default list'"
+                               required>
+                    </td>
+                    <td>
+                        <input ng-click="change($index)"
+                               ng-model="list.removed"
+                               class="form-control"
+                               ng-disabled="list.name == 'Default list'"
+                               type="checkbox">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" ng-click="$dismiss()">Cancel</button>
+        <button class="btn btn-success" type="button" ng-click="$close(favoriteLists)">Save</button>
+    </div>
+</form>

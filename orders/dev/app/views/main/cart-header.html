@@ -1,0 +1,38 @@
+<a href class="dropdown-toggle clear" dropdown-toggle>
+    <i ng-class="{
+        'icon-basket': !productSvc.getSumAmount(cart.getList()),
+        'icon-basket-loaded': productSvc.getSumAmount(cart.getList()) }">
+        <span class="badge badge-sm up bg-danger pull-right-xs" ng-bind="productSvc.getSumAmount(cart.getList())"></span>
+    </i>
+</a>
+
+<div class="dropdown-menu w-xl animated fadeInUp">
+    <div class="panel bg-white cart-block">
+
+        <div class="panel-heading b-light bg-light">
+            <button class="btn btn-link open-cart" ui-sref="order.cart">View my shopping cart</button>
+            <button class="btn btn-link pull-right remove-all"
+                    yes-no-modal="CLEAR_CART"
+                    on-confirm="cart.clear()"
+                    ng-disabled="!productSvc.getSumPrice(cart.getList())">Remove all</button>
+        </div>
+
+        <div class="list-group">
+            <div class="list-group-item">
+
+                <span class="clear block m-b-none cart-products wrapper-xs" ng-repeat="product in cart.getList() track by $index">
+                    <strong class="product-title"
+                            ui-sref="products.show({ productId: product.id })"
+                            ng-bind="product.name">
+
+                    </strong>
+                    <span class="pull-right">{{ product.price | number:2 }} * {{ product.quantity }}</span>
+                </span>
+
+                <span class="clear block m-b-none wrapper-xs">Total:
+                    <span class="pull-right">{{ productSvc.getSumPrice(cart.getList()) | number:2 }} $</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

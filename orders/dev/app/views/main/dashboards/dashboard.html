@@ -1,0 +1,124 @@
+<div class="bg-light lter b-b wrapper-md ng-scope">
+    <h1 class="m-n font-thin h4">Welcome to KOPPS</h1>
+</div>
+
+<div class="wrapper-md dashboard">
+
+    <loading></loading>
+
+    <div class="row" ng-hide="inProgress">
+        <div class="col-lg-2">
+            <h4>Search for product by</h4>
+            <div class="inner-addon right-addon">
+
+                <search-box></search-box>
+
+                <div class="line b-b"></div>
+
+                <h4 class="m-t-lg">Your favorite lists</h4>
+
+                <div class="favorite-lists wrapper-sm product-grey-border product-grey-back">
+                    <div class="favorite-list" ng-repeat="list in favorite">
+                        <strong class="favorite-list-name" ng-bind="::list.name"></strong>
+                        <div ng-repeat="product in list.products"
+                             ng-class="{ 'discontinued': product.removed }"
+                             class="favorite-products">
+
+                            <div class="corner-ribbon">Inactive</div>
+
+                            <img class="inline-block" ng-src="assets/images/{{ product.img || 'default.png' }}">
+
+                            <div class="inline-block">
+                                <div class="title"
+                                     ng-bind="::product.name"
+                                     ui-sref="products.show({ productId: product.id })"></div>
+                                Price: <span>{{ ::product.price | number:2 }}$</span>
+                                <div>
+                                    <input class="form-control input-sm quantity inline-block"
+                                           ng-init="quantity = 1"
+                                           ng-model="quantity"
+                                           ng-disabled="product.only_one || product.removed"
+                                           format="integer">
+                                    <i class="icon-basket inline-block" ng-click="cart.addProduct(product, quantity)"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="see-more pull-right" ui-sref="order.favorite-one({ orderId: list.id })">See more...</a>
+                        <div class="clearfix"></div>
+                        <div ng-hide="$last" class="line b-b"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <h4>Your recent orders</h4>
+
+            <custom-table table-name="CUSTOMER_DASHBOARD"
+                          content="orders"
+                          action1="toCart(data)">
+            </custom-table>
+
+            <h4 class="inline-block">Recently Purchased Items</h4>
+
+            <a class="see-more m-l-md"
+               ng-hide="recentlyProducts.length == totalPurchased"
+               ng-click="getPurchased()">
+                See more...
+            </a>
+
+            <div class="alert alert-warning text-center" ng-hide="recentlyProducts.length">
+                There is not any submitted order in the system.
+            </div>
+
+            <div class="recent-products-table row" ng-show="recentlyProducts.length">
+                <div ng-repeat="product in recentlyProducts"
+                     ng-class="{ 'discontinued': product.removed }"
+                     class="pull-left col-mg-6 row recent-products product-grey-border product-grey-back">
+
+                    <div class="corner-ribbon">Inactive</div>
+
+                    <div class="col-xs-3 centered-img">
+                        <img ng-src="assets/images/{{ product.img || 'default.png' }}" ui-sref="products.show({ productId: product.id })" class="{{ product.img ? '' : 'default' }}">
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="product-line">
+                            <div class="title hover"
+                                 ng-bind="product.name"
+                                 ui-sref="products.show({ productId: product.id })"></div>
+
+                            <div class="brand hover" ng-bind="product.category_name" ui-sref="products.index({ categoryId: product.category })"></div>
+
+                            <div class="price pull-right">Price:  ${{ product.price | number:2 }}</div>
+                        </div>
+
+                        <div class="product-line">
+                            <div>{{ product.manf_name }}, {{ product.manf_id }}</div>
+
+                            <span class="m-l-lg" ng-bind="product.uom_name"></span>
+
+                            <div class="qty pull-right">
+                                <div>Qty:</div>
+                                <div>
+                                    <input class="form-control input-sm quantity"
+                                           ng-init="quantity = 1"
+                                           ng-model="quantity"
+                                           ng-disabled="product.only_one || product.removed"
+                                           format="integer">
+                                </div>
+                                <div class="cart">
+                                    <i class="icon-basket" ng-click="cart.addProduct(product, quantity)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-line">
+                            {{ product.description | limitTo: 110 }}...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

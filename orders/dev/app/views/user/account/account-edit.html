@@ -1,0 +1,235 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a ui-sref="account.index">Account</a></li>
+            <li><a>Edit</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+    <loading></loading>
+    <div class="row" ng-hide="inProgress">
+        <div class="col-sm-7">
+            <form name="updateAccountForm"
+                  id="updateAccountForm"
+                  novalidate
+                  ng-submit="save(updateAccountForm.$valid)">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Edit account form</div>
+                    <div class="panel-body create-account hbox">
+                        <div class="table-row">
+                            <div class="col">
+                                Account Type
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio"
+                                               ng-init="account.type = 'standard'"
+                                               ng-model="account.type"
+                                               ng-disabled="account.users.length"
+                                               value="standard">
+                                        Standard
+                                    </label>
+                                    <label>
+                                        <input
+                                                type="radio"
+                                                ng-model="account.type"
+                                                ng-disabled="account.users.length"
+                                                value="corporate">
+                                        Corporate
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Account Status
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio"
+                                               ng-model="account.status"
+                                               ng-init="account.status = 'active'"
+                                               value="active">
+                                        Active
+                                    </label>
+                                    <label>
+                                        <input type="radio"
+                                               ng-model="account.status"
+                                               value="inactive">
+                                        Inactive
+                                    </label>
+                                    <label>
+                                        <input type="radio"
+                                               ng-model="account.status"
+                                               value="prospective">
+                                        Prospective
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col"></div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="checkbox"
+                                           id="allow_template"
+                                           name="allow_template"
+                                           ng-disabled="account.users.length"
+                                           ng-model="account.allow_pricing_template">
+                                    <span class="m-t-xs">
+                                        <label for="allow_template">Use Pricing Templates</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">Pricing Template</div>
+                            <div class="col pricing-templates">
+                                <ui-select id="pricing_template_id"
+                                           name="pricing_template_id"
+                                           ng-disabled="!account.allow_pricing_template || account.users.length"
+                                           ng-required="account.allow_pricing_template"
+                                           ng-model="account.pricing_template_id">
+                                    <ui-select-match allow-clear="{{ allowClear() }}" placeholder="Select a template">{{ $select.selected.name }}</ui-select-match>
+                                    <ui-select-choices repeat="template.id as template in templates | propsFilter: { name: $select.search }">
+                                        <span ng-bind-html="template.name | highlight: $select.search"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <div ng-show="isSubmited" ng-messages="updateAccountForm.pricing_template_id.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Account ID
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="account_id"
+                                           name="account_id"
+                                           ng-model="account.account_id"
+                                           ng-model-options="{ debounce: 500 }"
+                                           unique-field="accounts"
+                                           class="form-control"
+                                           edit-id="account.id"
+                                           ng-required="true">
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="updateAccountForm.account_id.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                    <div ng-message="unique" class="tooltips">
+                                        You input an exist account ID
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Account Name
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type="text"
+                                           id="name"
+                                           name="name"
+                                           err-border="updateAccountForm"
+                                           ng-model="account.name"
+                                           ng-required="true"
+                                           class="form-control">
+                                </div>
+                                <div ng-show="isSubmited" ng-messages="updateAccountForm.name.$error">
+                                    <div ng-message="required" class="tooltips">
+                                        Required...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row">
+                            <div class="col">
+                                Locations
+                                <sup class="required-sup">*</sup>
+                            </div>
+                            <div class="col">
+                                <div ng-repeat="location in locations">
+                                    {{ $index + 1 }}.
+                                    {{ location.name }}
+                                    <i class="fa fa-edit edit-button" ng-click="showEditForm($index)"></i>
+                                    <i class="fa fa-trash-o remove-button" 
+                                      ng-if="!account.users.length"
+                                      ng-click="removeLocation($index)"></i>
+                                    <location-form ng-show="activeEditLocation == $index"
+                                                   on-save="changeLocation(data, $index)"
+                                                   on-close="closeForm()"
+                                                   button-name="Update"
+                                                   location="location">
+
+                                    </location-form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-row add-location">
+                            <div class="col"></div>
+                            <div class="col">
+                                <a ng-click="showAddForm()"
+                                   ng-if="!addNew">
+                                    <i class="fa fa-plus"></i>
+                                    Add more locations</a>
+                                <input type="number"
+                                       style="display:none"
+                                       id="locations"
+                                       name="locations"
+                                       ng-model="locations.length"
+                                       ng-required="true">
+                            </div>
+                        </div>
+
+                        <div class="table-row" ng-if="addNew">
+                            <div class="col"></div>
+                            <div class="col">
+                                <location-form on-save="addLocation(data)"
+                                               on-close="closeForm()"
+                                               button-name="Add location"></location-form>
+                                <!-- validation messages-->
+                                <div ng-show="isSubmited" ng-messages="updateAccountForm.locations.$error">
+                                    <div class="tooltips" ng-message="required">
+                                        Please enter at least one location
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-row account-buttons">
+                            <div class="col"></div>
+                            <div class="col padding-top">
+                                <button class="btn btn-success pull-right"
+                                        type="submit">Save</button>
+                                <button class="btn btn-danger pull-right m-r-sm" ui-sref="account.index">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

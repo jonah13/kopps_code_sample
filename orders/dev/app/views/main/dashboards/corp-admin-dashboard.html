@@ -1,0 +1,141 @@
+<div class="bg-light lter b-b wrapper-md ng-scope">
+    <h1 class="m-n font-thin h4">Welcome to KOPPS</h1>
+</div>
+
+<div class="wrapper-md dashboard">
+
+    <loading></loading>
+
+    <div class="row" ng-hide="inProgress">
+        <div class="col-lg-2">
+            <h4>Search for product by</h4>
+            <div class="inner-addon right-addon">
+
+                <search-box></search-box>
+
+            </div>
+        </div>
+
+        <div class="col-lg-10">
+            <h4>Pending orders</h4>
+            <h5 class="inline-block">Filter by location (Facility)</h5>
+
+            <ui-select class="inline-block m-b-sm"
+                       ng-model="filters.location"
+                       ng-disabled="!locations.length || !pendingOrders.length"
+                       style="width: 250px;">
+                <ui-select-match allow-clear placeholder="Select a location">{{ $select.selected.name }}</ui-select-match>
+                <ui-select-choices repeat="location.id as location in locations | propsFilter: { name: $select.search }">
+                    <span ng-bind-html="location.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+
+            <div class="alert alert-warning text-center" ng-hide="pendingOrders.length">
+                There is not any pending order in the system.
+            </div>
+
+            <table ng-show="pendingOrders.length" class="table table-bordered table-hover table-condensed bg-white-only">
+                <tr style="font-weight: bold" class="product-grey-back">
+                    <td>
+                        Order ID
+                        <span sortings="id" on-change="order(params, 'pendingParams', 'getPendingOrders')"></span>
+                    </td>
+                    <td class="v-middle">
+                        PO number
+                        <span sortings="po" on-change="order(params, 'pendingParams', 'getPendingOrders')"></span>
+                    </td>
+                    <td>
+                        Number of Items
+                        <span sortings="total_amount" on-change="order(params, 'pendingParams', 'getPendingOrders')"></span>
+                    </td>
+                    <td>
+                        Total Price ($)
+                        <span sortings="sum_price" on-change="order(params, 'pendingParams', 'getPendingOrders')"></span>
+                    </td>
+                    <td>
+                        Order Date
+                        <span sortings="updated_at" on-change="order(params, 'pendingParams', 'getPendingOrders')"></span>
+                    </td>
+                    <td>
+                        Location (Facility)
+                    </td>
+                    <td>
+                        Submitted by
+                    </td>
+
+                    <td class="min-width-240"></td>
+
+                </tr>
+                <tr ng-repeat="order in pendingOrders">
+                    <td class="v-middle">
+                        <a class="link" ng-bind="order.id | orderId" ui-sref="order.modify-pending({ orderId: order.id })"></a>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.po"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.total_amount"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.sum_price | number:2"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.created_at"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.location_name"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.first_name"></span>
+                    </td>
+                    <td class="v-middle">
+                        <button class="btn btn-sm btn-success"
+                                yes-no-modal="APPROVE_ORDER"
+                                on-confirm="changeStatus(order.id, 'submited')">Approve</button>
+                        <button class="btn btn-sm btn-info" ui-sref="order.modify-pending({ orderId: order.id })">Modify</button>
+                        <button class="btn btn-sm btn-danger"
+                                yes-no-modal="REJECT_ORDER"
+                                on-confirm="changeStatus(order.id, 'rejected')">Reject</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-lg-12">
+            <h4 class="inline-block">Location Purchase Overview </h4>
+            <span class="inline-block font-10 m-l-sm"> Last 30 days</span>
+
+            <div class="alert alert-warning text-center" ng-hide="statistics.length">
+                There is not any pending order in the system.
+            </div>
+
+            <table ng-show="statistics.length" class="table table-bordered table-hover table-condensed bg-white-only">
+                <tr style="font-weight: bold" class="product-grey-back">
+                    <td>
+                        Location
+                        <span sortings="name" on-change="order(params, 'statisticParams', 'getStatistic')"></span>
+                    </td>
+                    <td>
+                        Total purchased quantity
+                        <span sortings="total_amount" on-change="order(params, 'statisticParams', 'getStatistic')"></span>
+                    </td>
+                    <td>
+                        Total Price ($)
+                        <span sortings="sum_price" on-change="order(params, 'statisticParams', 'getStatistic')"></span>
+                    </td>
+                </tr>
+                <tr ng-repeat="statistic in statistics">
+                    <td class="v-middle">
+                        <span ng-bind="statistic.name"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="statistic.total_amount"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="statistic.sum_price | number:2"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

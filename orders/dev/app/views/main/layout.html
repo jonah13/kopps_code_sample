@@ -1,0 +1,13 @@
+<div ng-controller="MainController"
+     class="app-header-fixed app-aside-fixed app-aside-folded">
+     <!--ng-class="{ 'app-aside-folded': !$root.menu }"-->
+    <main-header></main-header>
+
+    <!--<div data-ng-include=" 'views/main/menu.html' " class="app-aside hidden-xs bg-dark"></div>-->
+
+    <div class="app-content">
+        <div class="app-content-body" ui-view></div>
+    </div>
+
+    <main-footer></main-footer>
+</div>

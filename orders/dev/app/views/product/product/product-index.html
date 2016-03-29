@@ -1,0 +1,106 @@
+<div id="products-top">
+    <div class="bg-light lter b-b wrapper-md products-header">
+        <div class="pull-left">
+            <ol class="breadcrumb">
+                <li><a ng-click="$root.goToDashboard()"><i class="fa fa-home"></i> Home</a></li>
+                <li><a ui-sref="products.index">Products</a></li>
+            </ol>
+        </div>
+        <div class="pull-right">
+            <div class="text"><strong>Filter by: </strong></div>
+            <div class="text">
+                <label class="m-l-sm hover">
+                    <input type="radio" ng-model="filters.price" value="all">
+                    All
+                </label>
+                <label class="m-l-sm hover">
+                    <input type="radio" ng-model="filters.price" value="non">
+                    Default Pricing
+                </label>
+                <label class="m-l-sm hover">
+                    <input type="radio" ng-model="filters.price" value="custom">
+                    Contract Pricing
+                </label>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="wrapper-md product-content">
+
+        <loading></loading>
+
+        <div class="row" ng-hide="inProgress">
+            <div class="col-lg-2 col-sm-3">
+
+                <category-filter category="filters.category" category-id="filters.categoryId"></category-filter>
+
+            </div>
+            <div class="col-lg-10 col-sm-9">
+
+                <div class="alert alert-warning text-center" ng-hide="products.length">
+                    There is not any product in the system.
+                </div>
+
+                <div class="row products product-grey-border product-grey-back"
+                     ng-class="{ 'discontinued': product.removed }"
+                     ng-repeat="product in products">
+
+                    <div class="corner-ribbon">Inactive</div>
+
+                    <div class="col-md-2 col-sm-2">
+                        <img ng-src="assets/images/{{ product.img || 'default.png' }}" ui-sref="products.show({ productId: product.id })">
+                    </div>
+                    <div class="col-md-10 col-sm-10">
+                        <div class="product-line">
+                            <div class="title"
+                                 ng-bind="product.name"
+                                 ui-sref="products.show({ productId: product.id })"></div>
+
+                            <div class="pull-right product-quantity" ng-if="auth.isCustomer()">
+
+                                <div class="qty">
+                                    <div>Qty:</div>
+                                    <div>
+                                        <input class="form-control input-sm quantity"
+                                               ng-init="quantity = 1"
+                                               ng-model="quantity"
+                                               ng-disabled="product.only_one || product.removed"
+                                               format="integer">
+                                    </div>
+                                </div>
+                                <div class="cart">
+                                    <i class="icon-basket" ng-click="cart.addProduct(product, quantity)"></i>
+                                </div>
+                                <div class="favorite">
+                                    <i class="fa {{ (favorite.inList(product.id)) ? 'fa-star text-warning' : 'fa-star-o' }}"
+                                       yes-no-modal="ADD_PRODUCT_FAVORITE_LIST"
+                                       condition="favorite.getAmountLists() > 1"
+                                       params="{ id: product.id }"
+                                       on-confirm="favorite.addProduct(data, product.id)">
+                                    </i>
+                                </div>
+                            </div>
+
+                            <div class="price pull-right m-r-lg">Price:  ${{ product.price | number:2 }}</div>
+
+                            <div class="pull-right m-r-lg">
+                                <span ng-bind="product.uom_name"></span>
+                            </div>
+
+                        </div>
+                        <div class="product-line">
+                            <div class="brand" ng-bind="product.category_name" ng-click="filters.categoryId = product.category; filters.category = true;"></div>
+                        </div>
+                        <div class="product-line">
+                            <div>{{ product.manf_name }}, {{ product.manf_id }}</div>
+                        </div>
+                        <div>
+                            {{ product.description | limitTo: 320 }}...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

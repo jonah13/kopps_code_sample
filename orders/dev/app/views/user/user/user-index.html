@@ -1,0 +1,86 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Users</a></li>
+        </ol>
+        <button class="btn btn-success pull-right add-location btn-sm" ui-sref="user.main.create">Add new user</button>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <div class="row m-b-md">
+        <div class="inner-addon right-addon m-n col-md-3">
+            <!--<i class="fa fa-times" ng-click="filters.substr = ''"></i>-->
+            <input type="text"
+                   ng-model="filters.substr"
+                   ng-model-options="{ debounce: 400 }"
+                   placeholder="Username / Full name"
+                   class="form-control">
+        </div>
+        <div class="col-md-3">
+            <ui-select ng-model="filters.type">
+                <ui-select-match>{{ $select.selected.title }}</ui-select-match>
+                <ui-select-choices repeat="type.name as type in types">
+                    <span ng-bind="type.title"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-3">
+            <ui-select ng-model="filters.accountId">
+                <ui-select-match allow-clear placeholder="Select an account">{{ $select.selected.name }}</ui-select-match>
+                <ui-select-choices repeat="account.id as account in accounts | propsFilter: { name: $select.search }">
+                    <span ng-bind-html="account.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+
+    <loading></loading>
+
+    <div class="alert alert-warning text-center" ng-hide="users.length || inProgress">
+        There is not any user in the system.
+    </div>
+
+    <table ng-show="users.length" class="table table-bordered table-hover table-condensed bg-white-only">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td width="15%">Username</td>
+            <td width="15%">Full Name</td>
+            <td width="12%">User Type</td>
+            <td width="15%">Account Name</td>
+            <td width="20%">Location(s)</td>
+            <td width="23%">Actions</td>
+
+        </tr>
+        <tr ng-repeat="user in users">
+            <td class="v-middle">
+                <span ng-bind="user.username">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="user.first_name || '-'">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="user.type | types:'user'">
+                </span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="user.account || '-'"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="user.location || user.locations || '-'"></span>
+            </td>
+            <td class="v-middle">
+                <div class="buttons">
+                    <button class="btn btn-sm btn-success" view-activity-button by="user" field-id="{{ user.id }}" account="{{ user.account_id }}">User activity</button>
+                    <button class="btn btn-sm btn-info" ui-sref="user.main.edit({ userId: user.id })">Edit</button>
+                    <button class="btn btn-sm btn-danger" 
+                            yes-no-modal="REMOVE_USER"
+                            on-confirm="remove(user.id)">Remove</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,77 @@
+.general-attributes div div > * {
+    display: inline-block;
+}
+
+.general-attributes .form-group {
+    margin-bottom: 0px;
+}
+
+.general-attributes input[type=checkbox] {
+    width: 20px;
+    margin-bottom: 6px;
+    vertical-align: middle;
+}
+
+.custom-attributes .hbox .col:last-child input {
+    width: 70%;
+}
+
+.custom-attribute .col input {
+    width: 90%;
+}
+
+.custom-attribute .col input, .custom-attribute .col select {
+    height: 32px;
+}
+
+.attributes > input, .attributes > i {
+    display: inline-block;
+}
+.custom-attributes i:hover {
+    cursor: pointer;
+}
+
+.custom-attribute {
+    width: 85%;
+}
+
+.custom-attributes > div > div > i {
+    font-size: 20px;
+}
+
+.custom-attribute div.col:nth-child(1) {
+    width: 26%;
+}
+
+.custom-attribute div.col:nth-child(2) {
+    width: 34%;
+}
+
+.custom-attribute div.col:nth-child(3) {
+    padding-left: 10px;
+}
+
+.tooltips-before.small {
+    right: 106%;
+    top: -31px;
+    min-width: 100px;
+}
+
+.tooltips.category-tooltip {
+    top: -42px;
+    min-width: 150px;
+    margin-left: -46px;
+}
+
+.custom-attribute select.form-control {
+    padding: 5px;
+}
+
+.hover {
+    cursor: pointer;
+}
+
+.add-atribute {
+    font-size: 16px;
+    font-weight: 500;
+}

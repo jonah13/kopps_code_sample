@@ -1,0 +1,51 @@
+<div class="alert alert-warning text-center"
+     ng-show="!content.length && !untouched"
+     ng-bind="::table.onEmptyMessage">
+</div>
+
+<table class="table table-bordered table-hover table-condensed bg-white-only"
+       ng-show="content.length">
+    <tr style="font-weight: bold" class="product-grey-back">
+        <td ng-repeat="column in table.fields track by $index">
+            {{ ::column.name }}
+            <span class="arrows-sorts pull-right {{ getClass(column.propertyName) }}"
+                  ng-show="column.sorting"
+                  ng-click="sort(column.propertyName)"></span>
+        </td>
+    </tr>
+    <tr ng-repeat="row in tableContent | orderBy : localSorting.column : localSorting.sort">
+        <td class="v-middle"
+            ng-repeat="column in row.table track by $index">
+            <span class="{{ ::table.fields[$index].class + ' ' + column }}"
+                  ng-if="!table.fields[$index].filter"
+                  ng-click="redirect($parent.$index, $parent.row.id, 'fields')"
+                  ng-bind="column"></span>
+            <span class="{{ ::table.fields[$index].class + ' ' + column }}"
+                  ng-click="redirect($parent.$index, $parent.row.id, 'fields')"
+                  ng-if="table.fields[$index].filter">{{ column | applyFilter: table.fields[$index].filter }}</span>
+        </td>
+
+        <td class="v-middle"
+            ng-show="table.buttons">
+            <button ng-if="button.confirmation"
+                    class="{{ ::button.class }} m-l-xs"
+                    ng-repeat="button in table.buttons"
+                    ng-bind="::button.name"
+                    yes-no-modal="{{ ::button.confirmation }}"
+                    on-confirm="action($index + 1, { data: $parent.row.id })">
+            </button>
+            <button ng-if="!button.confirmation && !button.redirect"
+                    class="{{ ::button.class }} m-l-xs"
+                    ng-repeat="button in table.buttons"
+                    ng-bind="::button.name"
+                    ng-click="action($index + 1, { data: $parent.row.id })">
+            </button>
+            <button ng-if="button.redirect"
+                    class="{{ ::button.class }} m-l-xs"
+                    ng-repeat="button in table.buttons"
+                    ng-bind="::button.name"
+                    ng-click="redirect($parent.$index, $parent.row.id, 'buttons')">
+            </button>
+        </td>
+    </tr>
+</table>

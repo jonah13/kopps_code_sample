@@ -1,0 +1,137 @@
+<div ng-if="products">
+    <div class="bg-light lter b-b wrapper-md products-header">
+        <div>
+            <ol class="breadcrumb">
+                <li><a ng-click="$root.goToDashboard()"><i class="fa fa-home"></i> Home</a></li>
+                <li><a ui-sref="products.index">Product catalog</a></li>
+                <li class="active">{{ products[0].category_name }}</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="wrapper-md product-content">
+        <div class="row">
+            <div class="col-md-6">
+                <div>
+                    <h3>Mfr# {{ products[0].manf_id }}</h3>
+                </div>
+                <div class="product-img-container product-grey-border"
+                     ng-class="{ 'discontinued': products[0].removed }">
+                    <div class="corner-ribbon big">Inactive</div>
+                    <img ng-src="assets/images/{{ ::products[0].img || 'default.png' }}">
+                    <div class="price">${{ ::products[0].price | number:2 }}</div>
+                    <i class="fa fa-expand increase-img" ng-click="openLightboxModal()"></i>
+                </div>
+
+                <h3>Product catalog / {{ products[0].category_name }}:</h3>
+
+                <div class="product-grey-border row mini-product product-grey-back product-box"
+                     ng-repeat="i in [1,2]"
+                     ng-show="products[i]">
+                    <div class="col-xs-3 centered-img">
+                        <img ng-src="assets/images/{{ ::products[i].img || 'default.png' }}">
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="product-line">
+                            <div class="title"
+                                 ng-bind="::products[i].name"
+                                 ui-sref="products.show({ productId: products[i].id })"></div>
+                            <div class="brand" ng-bind="::products[i].category_name" ui-sref="products.index({ categoryId: products[i].category })"></div>
+                        </div>
+                        <div class="product-line">
+                            <div class="category" ng-bind="::products[i].uom_name"></div>
+                            <div> / </div>
+                            <div class="sub-category" ng-bind="::products[i].uom_abbr"></div>
+                            <div class="pull-right price">${{ ::products[i].price | number:2 }}</div>
+                        </div>
+                        <div class="product-line">
+                            <div>{{ ::products[i].manf_id }}, {{ ::products[i].manf_name }}</div>
+                        </div>
+                        <div>{{ ::products[i].description | limitTo: 250 }}...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 product-description">
+                <div>Mfr# {{ ::products[0].manf_id }} {{ ::products[0].manf_name }}</div>
+                <h2>{{ products[0].name }}</h2>
+                <div class="product-grey-back product-grey-border qty">
+
+                    <div>{{ ::products[0].uom_name }}</div>
+
+                    <div class="favorite pull-right" ng-if="auth.isCustomer()">
+                        <i class="fa {{ (favorite.inList(products[0].id)) ? 'fa-star text-warning' : 'fa-star-o' }}"
+                           title="Add product to the favorite list(s)"
+                           yes-no-modal="ADD_PRODUCT_FAVORITE_LIST"
+                           condition="favorite.getAmountLists() > 1"
+                           params="{ id: products[0].id }"
+                           on-confirm="favorite.addProduct(data, products[0].id)"></i>
+                    </div>
+
+                    <div class="add-product pull-right" ng-if="auth.isCustomer()">
+
+                        <div>Qty: </div>
+
+                        <input class="form-control input-sm quantity"
+                               ng-init="quantity = 1"
+                               ng-model="quantity"
+                               ng-disabled="products[0].only_one || products[0].removed"
+                               format="integer">
+
+                        <i class="icon-basket m-r-sm"
+                           title="Add product to the shopping cart"
+                           ng-click="cart.addProduct(products[0], quantity)"></i>
+                    </div>
+
+                    <div class="price pull-right">Price:  ${{ ::products[0].price | number:2 }}</div>
+
+                </div>
+
+                <tabset class="m-t-md" justified="true">
+                    <tab heading="Product details">
+                        <table class="table m-b-none">
+                            <tbody>
+                                <tr>
+                                    <td>Item Name</td>
+                                    <td ng-bind="::products[0].name"></td>
+                                </tr>
+                                <tr>
+                                    <td>Manufacturer</td>
+                                    <td ng-bind="::products[0].manf_name"></td>
+                                </tr>
+                                <tr>
+                                    <td>Manufacturer #</td>
+                                    <td ng-bind="::products[0].manf_id"></td>
+                                </tr>
+                                <tr>
+                                    <td>Category</td>
+                                    <td ng-bind="::products[0].category_name"></td>
+                                </tr>
+                                <tr>
+                                    <td>Unit of Measurement (UOM)</td>
+                                    <td ng-bind="::products[0].uom_abbr"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Unit of Quantity</td>
+                                    <td ng-bind="::products[0].available_quantity"></td>
+                                </tr>
+                                <tr>
+                                    <td>Price</td>
+                                    <td>${{ ::products[0].price | number:2 }}</td>
+                                </tr>
+                                <tr ng-repeat="attr in products[0].attrs track by $index">
+                                    <td class="capitalize" ng-bind="::attr.name"></td>
+                                    <td ng-bind="::attr.value"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </tab>
+                    <tab heading="Description">
+                        <p class="wrapper-sm" ng-bind="::products[0].description"></p>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

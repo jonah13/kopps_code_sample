@@ -1,0 +1,107 @@
+<div class="bg-light lter b-b wrapper-md ng-scope">
+    <h1 class="m-n font-thin h4">Welcome to KOPPS</h1>
+</div>
+
+<div class="wrapper-md dashboard">
+
+    <loading></loading>
+
+    <div class="row" ng-hide="inProgress">
+        <div class="col-lg-12">
+            <h4>Recently submitted orders</h4>
+
+            <div class="alert alert-warning text-center" ng-hide="orders.length">
+                There is not any submitted order in the system.
+            </div>
+
+            <table ng-show="orders.length" class="table table-bordered table-condensed bg-white-only">
+                <tr style="font-weight: bold" class="product-grey-back">
+                    <td>
+                        Order ID
+                    </td>
+                    <td>
+                        Location / Facility name
+                    </td>
+                    <td>
+                        PO number
+                    </td>
+                    <td>
+                        Number of Products
+                    </td>
+                    <td>
+                        Total Price ($)
+                    </td>
+                    <td>
+                        Submitted by
+                    </td>
+                    <td>
+                        Notes
+                    </td>
+                    <td>
+                        Status
+                    </td>
+                </tr>
+                <tr ng-repeat="order in orders">
+                    <td class="v-middle">
+                        <a class="link" ui-sref="order.admin-detail({ orderId: order.id })" ng-bind="::order.id | orderId"></a>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.location_name"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="::order.po"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="::order.total_amount"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="order.sum_price | number:2"></span>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="::order.submitted_by"></span>
+                    </td>
+                    <td>
+                        <span ng-bind="::order.notes || '-'"></span>
+                    </td>
+                    <td>
+                        <span class="label {{ order.status }} capitalize" ng-bind="::order.status | types:'order'"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-lg-12">
+            <h4 class="inline-block">Account Purchase Overview </h4>
+            <span class="inline-block font-10"> Last 30 days</span>
+
+            <div class="alert alert-warning text-center" ng-hide="statistics.length">
+                There is not any submitted order in the system.
+            </div>
+
+            <table ng-show="statistics.length" class="table table-bordered table-hover table-condensed bg-white-only">
+                <tr style="font-weight: bold" class="product-grey-back">
+                    <td width="33%">
+                        Account Name
+                    </td>
+                    <td width="33%">
+                        Number of orders
+                    </td>
+                    <td width="33%">
+                        Total Price of all orders ($)
+                    </td>
+                </tr>
+                <tr ng-repeat="statistic in statistics">
+                    <td class="v-middle">
+                        <span ng-bind="statistic.name"></span>
+                    </td>
+                    <td class="v-middle">
+                        <a class="link" ui-sref="order.admin-recent({ account: statistic.account_id })" ng-bind="statistic.total_amount"></a>
+                    </td>
+                    <td class="v-middle">
+                        <span ng-bind="statistic.sum_price | number:2"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

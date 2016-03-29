@@ -1,0 +1,76 @@
+.table-row {
+    display: table-row;
+}
+
+.account-button {
+    margin-right: 10px;
+}
+
+.add-location > div {
+    padding-bottom: 10px;
+}
+
+.padding-top {
+    padding-top: 10px;
+}
+
+.pricing-templates .form-group > * {
+    display: inline-block;
+}
+
+.pricing-templates .form-group input[type=checkbox] {
+    width: 6%;
+    vertical-align: middle;
+}
+
+.col.pricing-templates {
+    width: 100%;
+    padding-bottom: 15px;
+}
+
+.pricing-templates .form-group > div {
+    width: 54%;
+}
+
+.pricing-templates .form-group > input {
+    margin: 0;
+}
+
+.in-line > div {
+    display: inline-block;
+}
+.note {
+    padding: 0 0 10px 20px;
+}
+.template-filters {
+    height: 60px;
+}
+
+td .label {
+    height: 26px;
+    display: block;
+    width: 70%;
+    padding: 7px;
+}
+
+td .label.active, td .label.processed, td .submited {
+    background-color: #27c24c;
+}
+
+td .label.inactive, td .label.pending, .received td .submited {
+    background-color: #fad733;
+}
+
+td .label.prospective, td .label.rejected, td .label.removed {
+    background-color: #f05050;
+}
+
+td .label.draft {
+    background-color: #fad733;
+}
+
+.required-sup {
+    font-size: 100%;
+    top: -2px;
+    color: red;
+}

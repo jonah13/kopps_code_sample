@@ -1,0 +1,18 @@
+<h4 class="text-center">Create new favorite list</h4>
+
+<form ng-submit="$close(title)">
+    <div class="modal-body">
+        <span class="help-block" style="margin-left:15px;">Favorite list name</span>
+        <input type="text"
+               class="form-control w-md center-block"
+               ng-model="title"
+               maxlength="20"
+               autofocus
+               required>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" ng-click="$dismiss()">Cancel</button>
+        <button class="btn btn-success" type="submit">Create</button>
+    </div>
+</form>

@@ -1,0 +1,26 @@
+{
+  "devel": true,
+  "browser": true,
+  "strict": true,
+  "bitwise": false,
+  "curly": false,
+  "eqeqeq": true,
+  "latedef": false,
+  "noarg": true,
+  "undef": true,
+  "unused": true,
+  "validthis": true,
+  "jasmine": true,
+  "globals": {
+    "angular": false,
+    "CryptoJS": false,
+    "inject": false,
+    "module": false,
+    "jQuery": true,
+    "angular": true,
+    "console": true,
+    "$": true,
+    "_": true,
+    "moment": true
+  }
+}

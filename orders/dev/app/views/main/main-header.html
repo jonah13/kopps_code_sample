@@ -1,0 +1,52 @@
+<header class="app-header navbar bg-info dker" xmlns="http://www.w3.org/1999/html">
+    <div class="navbar-header">
+        <button class="pull-right visible-xs dk" ui-toggle-class="show" data-target=".navbar-collapse">
+            <i class="glyphicon glyphicon-align-justify"></i>
+        </button>
+        <!--<a ui-sref="order.favorite" class="navbar-brand text-lt">KOPP</a>-->
+    </div>
+
+    <div class="collapse pos-rlt navbar-collapse box-shadow">
+
+        <!-- Admin menu -->
+        <div ng-if="auth.isAdmin()" ng-include="'views/main/menu/admin-menu.html'"></div>
+        <!-- Corporate admin menu -->
+        <div ng-if="auth.getRole() === 'corporate_admin'" ng-include="'views/main/menu/corporate-menu.html'"></div>
+        <!-- Customers menu -->
+        <div ng-if="auth.isCustomer()" ng-include="'views/main/menu/menu.html'"></div>
+
+
+        <form ng-if="!auth.isAdmin()" class="navbar-form navbar-form-sm navbar-left shift" ui-shift="prependTo" target=".navbar-collapse">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" ng-model="text" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search">
+                  <span class="input-group-btn">
+                    <button ng-click="search(text)" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i></button>
+                  </span>
+                </div>
+            </div>
+        </form>
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li ng-if="auth.isCustomer()" class="header-cart dropdown" cart-header dropdown></li>
+
+            <li class="dropdown" dropdown>
+                <a href class="dropdown-toggle clear" dropdown-toggle>
+                    <span class="hidden-sm hidden-md" ng-bind="::auth.getCurrentUser().first_name"></span><b class="caret"></b>
+                </a>
+
+                <ul class="dropdown-menu animated fadeInRight w">
+                    <li>
+                        <a ui-sref="user.me" ng-if="!auth.isAdmin()">Profile</a>
+                    </li>
+                    <li ng-hide="auth.isAdmin()" class="divider"></li>
+                    <li>
+                        <a ng-click="logout()">Logout</a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+</header>

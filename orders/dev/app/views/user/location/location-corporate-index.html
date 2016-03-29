@@ -1,0 +1,65 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.corporate_admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Locations</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+    <loading></loading>
+
+    <div class="alert alert-warning text-center" ng-hide="locations.length || inProgress">
+        There is not any location in the system.
+    </div>
+
+    <table ng-show="locations.length" class="table table-bordered table-hover table-condensed bg-white-only">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td width="15%">
+                Location Name
+                <span sortings="name" on-change="order(params)"></span>
+            </td>
+            <td width="15%">
+                Address 1
+                <span sortings="address_1" on-change="order(params)"></span>
+            </td>
+            <td width="15%">
+                Address 2
+                <span sortings="address_2" on-change="order(params)"></span>
+            </td>
+            <td width="8%">
+                State
+                <span sortings="state" on-change="order(params)"></span>
+            </td>
+            <td width="10%">
+                City
+                <span sortings="city" on-change="order(params)"></span>
+            </td>
+            <td width="10%">
+                Zip Code
+                <span sortings="zip" on-change="order(params)"></span>
+            </td>
+        </tr>
+        <tr ng-repeat="location in locations">
+            <td class="v-middle">
+                 <span ng-bind="location.name"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="location.address_1"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="location.address_2"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="location.state | fullStateName"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="location.city"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="location.zip"></span>
+            </td>
+        </tr>
+    </table>
+</div>

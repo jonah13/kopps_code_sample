@@ -1,0 +1,106 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Received Orders</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <loading></loading>
+
+    <div class="row m-b-md">
+        <div class="inner-addon right-addon m-n col-md-3">
+            <input type="text"
+                   ng-model="filters.orderId"
+                   ng-model-options="{ debounce: 400 }"
+                   placeholder="Order ID"
+                   class="form-control">
+        </div>
+        <div class="col-md-3">
+            <ui-select ng-model="filters.status">
+                <ui-select-match>Status: {{ $select.selected.title }}</ui-select-match>
+                <ui-select-choices repeat="type.name as type in filterValues">
+                    <span ng-bind="type.title"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-3">
+            <ui-select ng-model="filters.accountId">
+                <ui-select-match allow-clear placeholder="Select an account">{{ $select.selected.name }}</ui-select-match>
+                <ui-select-choices repeat="account.id as account in accounts | propsFilter: { name: $select.search }">
+                    <span ng-bind-html="account.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-3">
+            <ui-select ng-model="filters.locationId">
+                <ui-select-match allow-clear placeholder="Select a location">{{ $select.selected.name }}</ui-select-match>
+                <ui-select-choices repeat="location.id as location in locations | propsFilter: { name: $select.search }">
+                    <span ng-bind-html="location.name | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+
+    <div class="alert alert-warning text-center" ng-hide="orders.length">
+        There is not any submitted order in the system.
+    </div>
+
+    <table ng-show="orders.length" class="table table-bordered table-condensed bg-white-only received">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td width="10%">
+                Order ID
+            </td>
+            <td width="10%">
+                PO number
+            </td>
+            <td width="10%">
+                Number of Products
+            </td>
+            <td width="10%">
+                Total Price ($)
+            </td>
+            <td width="20%">
+                Location / Facility name
+            </td>
+            <td width="10%">
+                Submitted by
+            </td>
+            <td width="20%">
+                Notes
+            </td>
+            <td width="20%">
+                Status
+            </td>
+        </tr>
+        <tr ng-repeat="order in orders">
+            <td class="v-middle">
+                <a class="link" ui-sref="order.admin-detail({ orderId: order.id, received: true })" ng-bind="::order.id | orderId"></a>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="::order.po"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="::order.total_amount"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="order.sum_price | number:2"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="order.location_name"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="::order.submitted_by"></span>
+            </td>
+            <td>
+                <span ng-bind="::order.notes || '-'"></span>
+            </td>
+            <td>
+                <span class="label {{ order.status }} capitalize">{{ order.status | types:'admin_order' }}</span>
+            </td>
+        </tr>
+    </table>
+</div>

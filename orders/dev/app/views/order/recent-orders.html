@@ -1,0 +1,19 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Recent Orders</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <loading></loading>
+
+    <custom-table table-name="CUSTOMER_RECENT_ORDERS"
+                  content="orders"
+                  action1="toCart(data)"
+                  get-content="getOrders(params)">
+    </custom-table>
+</div>

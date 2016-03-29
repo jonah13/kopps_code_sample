@@ -1,0 +1,345 @@
+<form name="userCreateForm"
+      id="userCreateForm"
+      novalidate>
+    <div class="panel-body hbox">
+        <div class="table-row">
+            <div class="col">
+                Parent Account Name
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <ui-select name="account"
+                               id="account"
+                               ng-model="user.account"
+                               err-border="userCreateForm"
+                               ng-required="true">
+                        <ui-select-match placeholder="Select an account">{{ $select.selected.name }}</ui-select-match>
+                        <ui-select-choices repeat="account.id as account in accounts | propsFilter: { name: $select.search }">
+                            <span ng-bind-html="account.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <!-- validation messages-->
+                    <div ng-show="isSubmitted" ng-messages="userCreateForm.account.$error">
+                        <div ng-message="required" class="tooltips">
+                            You must select Parent Account name
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">
+                User location
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <ui-select name="locations"
+                               id="locations"
+                               ng-model="user.location_id"
+                               ng-disabled="!user.account"
+                               ng-required="true">
+                        <ui-select-match placeholder="Select a location">{{ $select.selected.name }}</ui-select-match>
+                        <ui-select-choices repeat="location.id as location in locations | propsFilter: { name: $select.search }">
+                            <span ng-bind-html="location.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted && user.type !== 'corporate_admin'" ng-messages="userCreateForm.locations.$error">
+                    <div ng-message="required" class="tooltips">
+                        You must select location
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- full user's name -->
+        <div class="table-row">
+            <div class="col">
+                Full Name (contact name)
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           name="first_name"
+                           id="first_name"
+                           ng-model="user.first_name"
+                           class="form-control"
+                           ng-required="true">
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.first_name.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- username -->
+        <div class="table-row">
+            <div class="col">
+                Username
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group inner-addon right-addon">
+                    <i class="fa fa-question-circle" ng-click="isSubmitted = false;userNameInfo = true;"></i>
+                    <input type="text"
+                           ng-if="$root.$state.current.name === 'user.main.edit'"
+                           edit-id="user.id"
+                           name="username"
+                           id="username"
+                           ng-model="user.username"
+                           unique-field="users"
+                           placeholder="At least 6 characters"
+                           ng-model-options="{ debounce: { default: 200, blur: 0 } }"
+                           class="form-control"
+                           ng-pattern="/^[a-zA-Z][\w._]{5,}$/"
+                           ng-required="true">
+
+                    <input type="text"
+                           ng-if="$root.$state.current.name !== 'user.main.edit'"
+                           name="username"
+                           id="username"
+                           ng-model="user.username"
+                           unique-field="users"
+                           placeholder="At least 6 characters"
+                           ng-model-options="{ debounce: { default: 200, blur: 0 } }"
+                           class="form-control"
+                           ng-pattern="/^[a-zA-Z][\w._]{5,}$/"
+                           ng-required="$root.$state.current.name !== 'user.main.edit'">
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.username.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                    <div ng-message="unique" class="tooltips">
+                        The inserted username is already in use
+                    </div>
+                    <div ng-message="pattern" class="tooltips big-tooltip">
+                        Please input at least 6 chars, start with letter/s, could be included with numbers or . or _
+                    </div>
+                </div>
+                <div ng-show="userNameInfo" class="tooltips">
+                    ex: Mike1986, MikeHardy, Mike.Hardy, Mike_Hardy
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">
+                Email
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="email"
+                           name="email"
+                           ng-if="$root.$state.current.name === 'user.main.edit'"
+                           id="email"
+                           edit-id="user.id"
+                           unique-field="users"
+                           placeholder="unique"
+                           ng-model="user.email"
+                           ng-model-options="{ debounce: 500 }"
+                           class="form-control"
+                           ng-required="true">
+                    <input type="email"
+                           name="email"
+                           ng-if="$root.$state.current.name !== 'user.main.edit'"
+                           id="email"
+                           unique-field="users"
+                           placeholder="unique"
+                           ng-model="user.email"
+                           ng-model-options="{ debounce: 500 }"
+                           class="form-control"
+                           ng-required="true">
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.email.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                    <div ng-message="email" class="tooltips">
+                        Requires valid email
+                    </div>
+                    <div ng-message="unique" class="tooltips">
+                        The inserted email is already in use
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">
+                Password
+                <sup class="required-sup">*</sup>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="{{ showPassword ? 'text' : 'password' }}"
+                           name="password"
+                           id="password"
+                           ng-model="user.password"
+                           ng-minlength="6"
+                           err-border="userCreateForm"
+                           placeholder="at least 6 characters"
+                           class="form-control"
+                           ng-required="$root.$state.current.name !== 'user.main.edit'">
+                                        <span ng-click="showPassword = !showPassword" class="show-pass">
+                                            <i class="fa {{ showPassword ? 'fa-eye-slash' : 'fa-eye' }}"></i>
+                                        </span>
+                </div>
+                <!-- validation messages-->
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.password.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                    <div ng-message="minlength" class="tooltips">
+                        You should input at least 6 characters
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">Phone</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text"
+                           name="phone"
+                           id="phone"
+                           ng-model="user.phone"
+                           ng-pattern="/^[0-9]+$/"
+                           err-border="userCreateForm"
+                           placeholder="only numbers"
+                           class="form-control">
+                </div>
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.phone.$error">
+                    <div ng-message="pattern" class="tooltips">
+                        Phone should contain numbers only
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">Shipping address</div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="checkbox"
+                           id="as_location"
+                           ng-model="user.as_location">
+                    <label for="as_location">
+                        Same as location address
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="table-row">
+            <div class="col">Address 1</div>
+            <div class="col">
+                <div class="form-group">
+                    <input class="form-control"
+                           name="shipping_address_1"
+                           id="shipping_address_1"
+                           type="text"
+                           ng-model="user.shipping_address_1"
+                           err-border="userCreateForm"
+                           ng-required="!user.as_location"
+                           ng-disabled="user.as_location">
+                </div>
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.shipping_address_1.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">Address 2</div>
+            <div class="col">
+                <div class="form-group">
+                    <input class="form-control"
+                           name="shipping_address_2"
+                           id="shipping_address_2"
+                           type="text"
+                           ng-model="user.shipping_address_2"
+                           ng-disabled="user.as_location">
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">State</div>
+            <div class="col">
+                <div class="form-group">
+                    <ui-select name="shipping_state"
+                               id="shipping_state"
+                               ng-model="user.shipping_state"
+                               ng-required="!user.as_location"
+                               ng-disabled="user.as_location">
+                        <ui-select-match placeholder="Select a state">{{ $select.selected.name }}</ui-select-match>
+                        <ui-select-choices repeat="state.value as state in statesList | propsFilter: { name: $select.search }">
+                            <span ng-bind-html="state.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.shipping_state.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">City</div>
+            <div class="col">
+                <div class="form-group">
+                    <input class="form-control"
+                           id="shipping_city"
+                           name="shipping_city"
+                           type="text"
+                           ng-model="user.shipping_city"
+                           ng-required="!user.as_location"
+                           ng-disabled="user.as_location">
+                </div>
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.shipping_city.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="col">Zip Code</div>
+            <div class="col">
+                <div class="form-group">
+                    <input class="form-control"
+                           id="shipping_zip"
+                           name="shipping_zip"
+                           type="text"
+                           ng-model="user.shipping_zip"
+                           ng-required="!user.as_location"
+                           ng-disabled="user.as_location">
+                </div>
+                <div ng-show="isSubmitted" ng-messages="userCreateForm.shipping_zip.$error">
+                    <div ng-message="required" class="tooltips">
+                        Required...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

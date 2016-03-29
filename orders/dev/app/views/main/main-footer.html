@@ -1,0 +1,27 @@
+<div class="app-footer navbar navbar-fixed-bottom bg-light lt b-t" ng-class="{'m-n': app.hideAside, 'hide': app.hideFooter}">
+    <nav ng-if="isVisible()">
+        <div class="pull-right">
+            <pagination ng-model="pagination.currentPage"
+                        items-per-page="pagination.perPage"
+                        previous-text="Prev"
+                        last-text="Last"
+                        first-text="First"
+                        class="pagination-sm"
+                        max-size="10"
+                        boundary-links="true"
+                        total-items="pagination.total"
+                        ng-change="change()">
+            </pagination>
+        </div>
+        <ui-select class="pull-right m-r-xs"
+                   on-select="change()"
+                   search-enabled="true"
+                   ng-model="pagination.perPage">
+            <ui-select-match>{{ $select.selected }}</ui-select-match>
+            <ui-select-choices repeat="i in perPage">
+                {{ i }}
+            </ui-select-choices>
+        </ui-select>
+        <div class="pull-right text">Show per page: </div>
+    </nav>
+</div>

@@ -1,0 +1,99 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div class="products-header">
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.admin_dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li ng-show="$root.$stateParams.account"><a ng-click="$root.goTo()" class="capitalize">{{ breadcrumbPart() }}s</a></li>
+            <li ng-show="$root.$stateParams.account"><a ui-sref="order.admin-recent($root.$stateParams)">Submitted Orders</a></li>
+            <li ng-show="$root.$stateParams.received"><a ui-sref="order.received">Received Orders</a></li>
+            <li><a ng-bind="order.id | orderId"></a></li>
+        </ol>
+
+        <div class="pull-right">
+            <a href="{{ getExportLink('pdf') }}" target="_blank" class="btn btn-success btn-sm m-r-xs">Export to PDF</a>
+            <a href="{{ getExportLink('excel') }}" target="_blank" class="btn btn-success btn-sm">Export to Excel</a>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper-md">
+
+    <div class="product-grey-border product-grey-back m-b-lg hbox wrapper-sm">
+        <div class="col">
+            <div><b>Account Name:</b> {{ ::order.account_name }}</div>
+            <div><b>Facility Name:</b> {{ order.location_name1 || order.location_name2 }}</div>
+            <div><b>PO#:</b> {{ ::order.po }}</div>
+        </div>
+        <div class="col">
+            <div><b>Submitted by:</b> {{ order.submitted_by || order.user_name }}</div>
+            <div><b>Order Date:</b> {{ ::order.updated_at }}</div>
+            <div><b>Order ID:</b> {{ order.id | orderId }}</div>
+        </div>
+        <div class="col">
+            <div>
+                <button ng-click="changeStatus()"
+                        class="btn btn-sm btn-success"
+                        ng-class="{ 'btn-success': order.status != 'processed', 'btn-warning': order.status == 'processed'}">
+                    {{ (order.status != 'processed') ? 'Process' : 'Mark as pending' }}
+                </button>
+            </div>
+            <b>Order Notes:</b> {{ order.notes || '-' }}
+        </div>
+    </div>
+
+    <table class="table table-bordered table-hover table-condensed bg-white-only order-detail">
+        <tr style="font-weight: bold" class="product-grey-back">
+            <td>
+                Mnf ID
+            </td>
+            <td>
+                Product Name
+            </td>
+            <td>
+                Manufacturer Name
+            </td>
+            <td>
+                Unit price ($)
+            </td>
+            <td>
+                Quantity
+            </td>
+            <td>
+                Total cost
+            </td>
+        </tr>
+        <tr ng-repeat="product in products">
+            <td class="v-middle">
+                <span ng-bind="product.manf_id"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.name"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.manf_name"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.price"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.quantity"></span>
+            </td>
+            <td class="v-middle">
+                <span ng-bind="product.price * product.quantity | number:2"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="v-middle"></td>
+            <td class="v-middle"></td>
+            <td class="v-middle"></td>
+            <td class="v-middle">
+                Subtotal:
+            </td>
+            <td class="v-middle">
+                {{ productSvc.getSumAmount(products) }} items
+            </td>
+            <td class="v-middle">
+                {{ productSvc.getSumPrice(products) | number:2 }}$
+            </td>
+        </tr>
+    </table>
+</div>

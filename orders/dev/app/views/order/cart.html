@@ -1,0 +1,115 @@
+<div class="bg-light lter b-b wrapper-md products-header">
+    <div>
+        <ol class="breadcrumb">
+            <li><a ui-sref="main.dashboard"><i class="fa fa-home"></i> Home</a></li>
+            <li><a>Shoping cart</a></li>
+        </ol>
+
+    </div>
+</div>
+
+<div class="wrapper-md product-content">
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="alert alert-warning text-center" ng-if="!productSvc.getSumAmount(cart.getList())">
+                You don't have any products in the shopping cart
+            </div>
+
+            <div class="row products product-grey-border product-grey-back"
+                 ng-class="{ 'discontinued': product.removed }"
+                 ng-repeat="product in cart.getList()">
+                <div class="corner-ribbon">Inactive</div>
+                <div class="col-lg-2">
+                    <img ng-src="assets/images/{{ product.img || 'default.png' }}">
+                </div>
+                <div class="col-lg-10 product-cart-description">
+                    <div class="product-line">
+                        <div class="title"
+                             ng-bind="product.name"
+                             ui-sref="products.show({ productId: product.id })"></div>
+                        <div class="brand" ng-bind="product.category_name" ui-sref="products.index({ categoryId: product.category })"></div>
+
+                        <div class="pull-right">
+                            <span ng-bind="product.uom_name"></span>
+
+                            <div class="price"> Price: {{ product.price | number:2 }}$</div>
+                            <div class="qty">
+                                <div>Qty:</div>
+                                <div>
+                                    <input class="form-control input-sm quantity"
+                                           ng-change="cart.changeQuantity(product.id, quantity)"
+                                           ng-init="quantity = product.quantity"
+                                           ng-model="quantity"
+                                           ng-disabled="product.only_one || product.removed"
+                                           format="integer">
+                                </div>
+                                <div class="remove">
+                                    <i class="fa fa-trash-o"
+                                       yes-no-modal="REMOVE_PRODUCT_FROM_CART"
+                                       on-confirm="cart.removeProduct(product.id)"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="product-line">
+                        <div>{{ product.manf_name }}, {{ product.manf_id }}</div>
+                    </div>
+                    <div>
+                        {{ product.description | limitTo: 320 }}...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <form name="shoppingCartForm"
+                  ng-submit="save()">
+                <div class="product-grey-border product-grey-back cart-buttons wrapper">
+                    <div class="price m-t-sm text-center">
+                        Subtotal ({{ productSvc.getSumAmount(cart.getList()) }} items):
+                    <span class=" usa-icon fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-usd fa-stack-1x fa-inverse"></i>
+                    </span>
+                        {{ productSvc.getSumPrice(cart.getList()) | number:2 }}
+                    </div>
+                    <input class="form-control"
+                           ng-model="cart.getOrder().po"
+                           ng-required="status == 'submitted'"
+                           placeholder="Please fill in the PO number">
+
+                    <textarea class="form-control"
+                              ng-model="cart.getOrder().notes"
+                              maxlength="100"
+                              placeholder="Notes"
+                              style="resize: none;"></textarea>
+
+                    <button class="btn m-b-xs w-xs btn-success"
+                            type="submit"
+                            ng-click="status = 'submitted';"
+                            ng-disabled="!productSvc.getSumAmount(cart.getList()) || inProgress">Submit</button>
+
+                    <button class="btn m-b-xs w-xs btn-info"
+                            type="button"
+                            ng-disabled="cart.getOrder().draft_id || !productSvc.getSumAmount(cart.getList())  || inProgress"
+                            ng-click="status = 'draft'; save('draft')">Save as draft</button>
+                    <div>
+                        1-click ordering is not available for at least one item in your order.
+                    </div>
+                    {{ promise }}
+
+                    <button class="btn m-b-xs w-xs btn-danger"
+                            type="button"
+                            yes-no-modal="CLEAR_CART"
+                            on-confirm="cart.clear()"
+                            disable-my-promise="promise"
+                            ng-disabled="!productSvc.getSumAmount(cart.getList())">
+                        <i class="fa fa-trash-o"></i>
+                        Remove all items
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
